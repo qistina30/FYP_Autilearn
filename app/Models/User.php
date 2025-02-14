@@ -13,7 +13,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password', 'organization_name', 'role', 'user_id'
+        'name', 'email', 'password', 'organization_name', 'role', 'user_id',
     ];
 
     protected $hidden = [
@@ -28,5 +28,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(Student::class, 'educator_user_id', 'user_id');
     }
+
 
 }

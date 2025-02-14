@@ -33,3 +33,17 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/educator/add-student', [StudentController::class, 'create'])->name('educator.add-student');
     Route::post('/educator/store-student', [StudentController::class, 'store'])->name('educator.store-student');
 
+// Student Dashboard
+Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
+
+// Learning Module Route
+Route::get('/student/learning-module/animal-recognition', function () {
+    return view('student.learning-module.animal-recognition');
+})->name('student.learning-module.animal-recognition');
+
+Route::post('/submit-answer', [StudentController::class, 'submitAnswer'])->name('submit.answer');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
