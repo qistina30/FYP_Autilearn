@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\EducatorController;
+use App\Http\Controllers\LearningModuleController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -36,14 +36,22 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 // Student Dashboard
 Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
 
-// Learning Module Route
-Route::get('/student/learning-module/animal-recognition', function () {
-    return view('student.learning-module.animal-recognition');
-})->name('student.learning-module.animal-recognition');
+
 
 Route::post('/submit-answer', [StudentController::class, 'submitAnswer'])->name('submit.answer');
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/learning', [LearningModuleController::class, 'index'])->name('learning.index');
+Route::post('/learning/store', [LearningModuleController::class, 'store'])->name('learning.store');
+Route::get('/learning/create', [LearningModuleController::class, 'create'])->name('learning.create');
+
+Route::delete('/learning/{id}', [LearningModuleController::class, 'destroy'])->name('learning.destroy');
+
+Route::get('/learning/activitylevel', [LearningModuleController::class, 'showLevelSelection'])->name('learning.select.level');
+
+
+Route::get('/learning/activity/{level}', [LearningModuleController::class, 'activityDetail'])->name('learning.activityDetail');
 

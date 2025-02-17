@@ -50,15 +50,18 @@
                             @endif
                         @else
                             <!-- Admin / Educator Links -->
-                            @if(Auth::user()->role == 'educator')
+                            @if(Auth::user())
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('educator.dashboard') }}">Dashboard</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('educator.add-student') }}">Add New Student</a>
                                 </li>
-                                <li class="nav-item">
+                               {{-- <li class="nav-item">
                                     <a class="nav-link" href="{{ route('student.dashboard') }}">Students</a>
+                                </li>--}}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('learning.index') }}">Let's Learn</a>
                                 </li>
                             @endif
                             <li class="nav-item dropdown">
