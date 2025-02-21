@@ -5,7 +5,7 @@
         <h2>All Available Learning Modules</h2>
 
         <!-- Choose Level Button -->
-        <a href="{{ route('learning.select.level') }}" class="btn btn-primary mb-3">Choose Level</a>
+        <a href="{{ route('choose.level') }}" class="btn btn-primary mb-3">Choose Level</a>
 
         <!-- Add New Learning Material Button -->
         @if(Auth::user()->role == 'admin' || Auth::user()->role == 'educator')

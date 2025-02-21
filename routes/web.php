@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\LearningModuleController;
@@ -36,22 +37,13 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 // Student Dashboard
 Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
 
-
-
-Route::post('/submit-answer', [StudentController::class, 'submitAnswer'])->name('submit.answer');
-
-Auth::routes();
-
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/learning', [LearningModuleController::class, 'index'])->name('learning.index');
 Route::post('/learning/store', [LearningModuleController::class, 'store'])->name('learning.store');
 Route::get('/learning/create', [LearningModuleController::class, 'create'])->name('learning.create');
-
 Route::delete('/learning/{id}', [LearningModuleController::class, 'destroy'])->name('learning.destroy');
 
-Route::get('/learning/activitylevel', [LearningModuleController::class, 'showLevelSelection'])->name('learning.select.level');
 
-
-Route::get('/learning/activity/{level}', [LearningModuleController::class, 'activityDetail'])->name('learning.activityDetail');
-
+Route::get('/activity/basic', [ActivityController::class, 'basic'])->name('activity.basic');
+Route::get('/activity/choose-level', [ActivityController::class, 'chooseLevel'])->name('choose.level');
