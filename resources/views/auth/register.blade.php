@@ -30,18 +30,6 @@
             </div>
         </div>
 
-        <!-- Organization Name -->
-        <div class="form-group row">
-            <label for="organization_name" class="col-md-4 col-form-label text-md-right">{{ __('Organization Name') }}</label>
-            <div class="col-md-6">
-                <input id="organization_name" type="text" class="form-control @error('organization_name') is-invalid @enderror" name="organization_name" value="{{ old('organization_name') }}" required>
-                @error('organization_name')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-                @enderror
-            </div>
-        </div>
 
         <!-- Password -->
         <div class="form-group row">

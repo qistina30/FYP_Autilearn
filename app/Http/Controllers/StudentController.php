@@ -8,30 +8,28 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
+use Exception;
 
 class StudentController extends Controller
 {
+    // Show educator dashboard if the user is an educator
     public function index()
     {
-        // Ensure the user has the 'educator' role
-        if (auth()->user()->hasRole('educator')) {
-            return view('educator.dashboard'); // Show educator dashboard view
+        if (auth()->check() && auth()->user()->role === 'educator') {
+            return view('educator.dashboard');
         } else {
-            return redirect()->route('home'); // Redirect to the home route if not an educator
+            return redirect()->route('home')->with('error', 'Access Denied!');
         }
     }
 
+    // Show add student form
     public function create()
     {
         return view('educator.add-students');
     }
 
-    /**
-     * Store a newly created student in the database.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
+    // Store Student and Guardian Data
     public function store(Request $request)
     {
         // Validate the request data
@@ -40,7 +38,7 @@ class StudentController extends Controller
             'ic_number' => 'required|string|unique:students,ic_number',
             'age' => 'required|integer',
             'address' => 'required|string',
-            'parent_name' => 'required|string|max:255',
+            'guardian_name' => 'required|string|max:255',
             'contact_number' => 'required|string|max:255',
             'email' => 'nullable|email',
         ]);
@@ -56,14 +54,12 @@ class StudentController extends Controller
         // Create the parent user (for the parent)
         $parentUser = User::create([
             'user_id' => $user_id,  // Assign the generated user ID
-            'name' => $validatedData['parent_name'],
+            'name' => $validatedData['guardian_name'],
             'email' => $validatedData['email'],
-            'password' => Hash::make('test123'),  // Default password for the parent
-            'role' => 'parent',  // Default role as 'parent'
+            'password' => Hash::make('test12345'),  // Default password for the parent
+            'role' => 'guardian',
         ]);
 
-        // Log parent user creation
-        Log::info('Parent User Created:', ['parent' => $parentUser]);
 
         // Create the student and associate with the educator and the newly created parent
         $student = Student::create([
@@ -71,7 +67,7 @@ class StudentController extends Controller
             'ic_number' => $validatedData['ic_number'],
             'age' => $validatedData['age'],
             'address' => $validatedData['address'],
-            'parent_name' => $validatedData['parent_name'],
+            'guardian_name' => $validatedData['guardian_name'],
             'contact_number' => $validatedData['contact_number'],
             'educator_user_id' => Auth::user()->user_id,  // Current authenticated educator
             'email' => $validatedData['email'],
@@ -90,18 +86,15 @@ class StudentController extends Controller
         }
     }
 
-
-
+    // Student Dashboard
     public function dashboard()
     {
-        return view('student.dashboard');  // This will load the dashboard with the learning modules.
+        return view('student.dashboard');
     }
 
-    // Display Learning Module
+    // Show Learning Module
     public function learningModule()
     {
-        return view('student.learning-module.animal-recognition'); // Add the module view here.
+        return view('student.learning-module.animal-recognition');
     }
-
-
 }

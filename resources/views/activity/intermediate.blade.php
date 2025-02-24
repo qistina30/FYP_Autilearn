@@ -9,9 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Find the Missing Letter</title>
+    <title>Find the Letter Game</title>
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -19,23 +18,32 @@
         body {
             text-align: center;
             font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
         }
         #gameBoard {
             margin-top: 20px;
-            font-size: 36px;
+            font-size: 48px;
             font-weight: bold;
+            color: #4CAF50;
         }
         .choiceBtn {
             width: 80px;
-            height: 60px;
+            height: 80px;
             font-size: 24px;
             margin: 10px;
+            background-color: #FFC107;
+            border: none;
+            color: white;
+            font-weight: bold;
+        }
+        .choiceBtn:hover {
+            background-color: #FF9800;
         }
     </style>
 </head>
 <body>
 
-<h1>Find the Missing Letter</h1>
+<h1>Find the Letter Game</h1>
 
 <!-- Select Student Dropdown -->
 <div>
@@ -68,6 +76,12 @@
         let correctLetter = "";
         let startTime, timerInterval;
 
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+        function getRandomLetter() {
+            return letters[Math.floor(Math.random() * letters.length)];
+        }
+
         function startGame() {
             let studentId = $("#studentSelect").val();
             if (!studentId) {
@@ -82,7 +96,7 @@
             $("#timer").text(0);
             $("#submitBtn").prop("disabled", true);
 
-            startTime = Date.now(); // Start the timer
+            startTime = Date.now();
             timerInterval = setInterval(updateTimer, 1000);
 
             nextRound();
@@ -95,7 +109,7 @@
 
         function nextRound() {
             if (round >= 5) {
-                clearInterval(timerInterval); // Stop timer when game ends
+                clearInterval(timerInterval);
                 $("#submitBtn").prop("disabled", false);
                 return;
             }
@@ -103,27 +117,22 @@
             round++;
             $("#round").text(round);
 
-            let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-            let startIdx = Math.floor(Math.random() * 23);
-            let sequence = alphabet.slice(startIdx, startIdx + 4);
-
-            let missingIdx = Math.floor(Math.random() * 4);
-            correctLetter = sequence[missingIdx];
-            sequence[missingIdx] = "_";
-
+            correctLetter = getRandomLetter();
             let choices = [correctLetter];
-            while (choices.length < 3) {
-                let randomChoice = alphabet[Math.floor(Math.random() * 26)];
-                if (!choices.includes(randomChoice)) {
-                    choices.push(randomChoice);
+
+            while (choices.length < 4) {
+                let randomLetter = getRandomLetter();
+                if (!choices.includes(randomLetter)) {
+                    choices.push(randomLetter);
                 }
             }
+
             choices.sort(() => Math.random() - 0.5);
 
             $("#gameBoard").html(`
-            <p>${sequence.join(" ")}</p>
-            ${choices.map(letter => `<button class="btn btn-info choiceBtn">${letter}</button>`).join(" ")}
-        `);
+                <p>Find the Letter: <strong>${correctLetter}</strong></p>
+                ${choices.map(letter => `<button class="btn choiceBtn">${letter}</button>`).join(" ")}
+            `);
         }
 
         $(document).on("click", ".choiceBtn", function () {
@@ -152,7 +161,7 @@
                     status: "Completed"
                 },
                 success: function() {
-                    alert("Game completed! Final Score: " + score );
+                    alert("Game completed! Final Score: " + score);
                 },
                 error: function() {
                     alert("Error saving progress.");

@@ -63,7 +63,6 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'organization_name' => ['required', 'string', 'max:255'],
         ]);
     }
 
@@ -88,17 +87,12 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'organization_name' => $data['organization_name'],
             'role' => 'educator', // Automatically assign 'educator' role
         ]);
     }
 
-    /**
-     * Override the redirect to login after registration.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function registered(Request $request, $user)
+
+    protected function registered(Request $request, $user): \Illuminate\Http\RedirectResponse
     {
         // Redirect to the login form after registration
         return redirect('/login')->with('status', 'Registration successful. Please login.');

@@ -10,19 +10,11 @@ class Student extends Model
     use HasFactory;
 
     protected $fillable = [
-        'full_name',
-        'ic_number',
-        'age',
-        'address',
-        'parent_name',
-        'contact_number',
-        'educator_user_id',
-        'email',
+        'full_name', 'ic_number', 'age', 'address', 'guardian_name',
+        'contact_number', 'email','educator_user_id',
     ];
 
-    /**
-     * Get the educator that added the student.
-     */
+
     public function educator()
     {
         return $this->belongsTo(User::class, 'educator_user_id', 'user_id');
@@ -32,5 +24,6 @@ class Student extends Model
     {
         return $this->belongsTo(User::class);
     }
+
 
 }
