@@ -20,6 +20,13 @@ class ActivityController extends Controller
         return view('activity.basic', compact('students')); // Pass students to the view
     }
 
+    public function basicLetterTracing()
+    {
+        $students = Student::all();
+        return view('activity.basicLetterTracing', compact('students'));
+    }
+
+
     public function intermediate()
     {
         $students = Student::all(); // Fetch all students
@@ -39,7 +46,7 @@ class ActivityController extends Controller
             'educator_id' => 'required|exists:users,user_id',
             'score' => 'required|integer',
             'time_taken' => 'required|integer',
-            'status' => 'required|string'
+//            'status' => 'required|string'
         ]);
 
         StudentProgress::create([
@@ -47,7 +54,7 @@ class ActivityController extends Controller
             'educator_id' => $request->educator_id,
             'score' => $request->score,
             'time_taken' => $request->time_taken,
-            'status' => $request->status
+//            'status' => $request->status
         ]);
 
         return response()->json(['message' => 'Progress saved successfully']);

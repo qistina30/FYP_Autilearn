@@ -52,3 +52,5 @@ Route::post('/activity/store-progress', [ActivityController::class, 'storeProgre
 Route::get('/activity/basic', [ActivityController::class, 'basic'])->name('activity.basic');
 Route::get('/activity/intermediate', [ActivityController::class, 'intermediate'])
     ->name('activity.intermediate');
+Route::get('/activity/basicLetterTracing', [ActivityController::class, 'basicLetterTracing'])
+    ->name('activity.basicLetterTracing');

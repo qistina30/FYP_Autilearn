@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Find the Letter Game</title>
+    <title>Letter Catch Game</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -20,30 +20,26 @@
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
         }
-        #gameBoard {
-            margin-top: 20px;
-            font-size: 48px;
-            font-weight: bold;
-            color: #4CAF50;
+        #gameArea {
+            position: relative;
+            width: 400px;
+            height: 500px;
+            border: 2px solid #000;
+            margin: 20px auto;
+            background-color: white;
+            overflow: hidden;
         }
-        .choiceBtn {
-            width: 80px;
-            height: 80px;
-            font-size: 24px;
-            margin: 10px;
-            background-color: #FFC107;
-            border: none;
-            color: white;
+        .letter {
+            position: absolute;
+            font-size: 40px;
             font-weight: bold;
-        }
-        .choiceBtn:hover {
-            background-color: #FF9800;
+            color: red;
         }
     </style>
 </head>
 <body>
 
-<h1>Find the Letter Game</h1>
+<h1>Letter Catch Game</h1>
 
 <!-- Select Student Dropdown -->
 <div>
@@ -57,30 +53,25 @@
 </div>
 
 <p><strong>Score:</strong> <span id="score">0</span></p>
-<p><strong>Round:</strong> <span id="round">0</span>/5</p>
-<p><strong>Time Taken:</strong> <span id="timer">0</span> seconds</p>
+<p><strong>Time Left:</strong> <span id="timeLeft">30</span> seconds</p>
 
 <!-- Hidden Input for Educator ID -->
 <input type="hidden" id="educator_id" value="{{ Auth::user()->user_id }}">
+
 <!-- Game Controls -->
 <button id="startBtn" class="btn btn-success">Start</button>
 <button id="submitBtn" class="btn btn-primary" disabled>Submit</button>
 
-<!-- Game Board -->
-<div id="gameBoard"></div>
+<!-- Game Area -->
+<div id="gameArea"></div>
 
 @push('scripts')
     <script>
         let score = 0;
-        let round = 0;
-        let correctLetter = "";
-        let startTime, timerInterval;
-
-        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-
-        function getRandomLetter() {
-            return letters[Math.floor(Math.random() * letters.length)];
-        }
+        let gameRunning = false;
+        let timeLeft = 30;
+        let startTime, endTime;
+        let interval, countdown;
 
         function startGame() {
             let studentId = $("#studentSelect").val();
@@ -89,65 +80,74 @@
                 return;
             }
 
-            score = 0;
-            round = 0;
-            $("#score").text(score);
-            $("#round").text(round);
-            $("#timer").text(0);
+            $("#score").text(0);
+            $("#timeLeft").text(30);
             $("#submitBtn").prop("disabled", true);
+            score = 0;
+            timeLeft = 30;
+            gameRunning = true;
 
-            startTime = Date.now();
-            timerInterval = setInterval(updateTimer, 1000);
+            startTime = Date.now(); // Capture start time
 
-            nextRound();
+            interval = setInterval(spawnLetter, 1000);
+            countdown = setInterval(updateTimer, 1000);
         }
 
         function updateTimer() {
-            let elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-            $("#timer").text(elapsedTime);
+            timeLeft--;
+            $("#timeLeft").text(timeLeft);
+
+            if (timeLeft <= 0) {
+                endGame();
+            }
         }
 
-        function nextRound() {
-            if (round >= 5) {
-                clearInterval(timerInterval);
-                $("#submitBtn").prop("disabled", false);
-                return;
-            }
+        function spawnLetter() {
+            if (!gameRunning) return;
 
-            round++;
-            $("#round").text(round);
+            let letter = String.fromCharCode(65 + Math.floor(Math.random() * 26)); // Random letter A-Z
+            let leftPosition = Math.floor(Math.random() * 350); // Random position in game area
 
-            correctLetter = getRandomLetter();
-            let choices = [correctLetter];
+            let letterElement = $("<div class='letter'>" + letter + "</div>");
+            letterElement.css({ top: "0px", left: leftPosition + "px" });
+            $("#gameArea").append(letterElement);
 
-            while (choices.length < 4) {
-                let randomLetter = getRandomLetter();
-                if (!choices.includes(randomLetter)) {
-                    choices.push(randomLetter);
+            let fallInterval = setInterval(() => {
+                let currentTop = parseInt(letterElement.css("top"));
+                if (currentTop > 480) { // If letter reaches the bottom
+                    letterElement.remove();
+                    clearInterval(fallInterval);
+                } else {
+                    letterElement.css("top", (currentTop + 5) + "px");
                 }
-            }
-
-            choices.sort(() => Math.random() - 0.5);
-
-            $("#gameBoard").html(`
-                <p>Find the Letter: <strong>${correctLetter}</strong></p>
-                ${choices.map(letter => `<button class="btn choiceBtn">${letter}</button>`).join(" ")}
-            `);
+            }, 50);
         }
 
-        $(document).on("click", ".choiceBtn", function () {
-            let chosenLetter = $(this).text();
-            if (chosenLetter === correctLetter) {
-                score += 10;
-            }
-            $("#score").text(score);
-            nextRound();
+        $(document).keydown(function (event) {
+            if (!gameRunning) return;
+
+            let pressedKey = String.fromCharCode(event.which); // Get pressed key letter
+            $(".letter").each(function () {
+                if ($(this).text() === pressedKey) {
+                    $(this).remove();
+                    score += 10;
+                    $("#score").text(score);
+                }
+            });
         });
+
+        function endGame() {
+            clearInterval(interval);
+            clearInterval(countdown);
+            gameRunning = false;
+            $("#submitBtn").prop("disabled", false);
+            endTime = Date.now();
+        }
 
         function submitGame() {
             let studentId = $("#studentSelect").val();
-            let timeTaken = $("#timer").text();
             let educatorId = $("#educator_id").val();
+            let timeTaken = Math.floor((endTime - startTime) / 1000); // Calculate time taken
 
             $.ajax({
                 url: "{{ route('activity.store-progress') }}",
@@ -157,11 +157,10 @@
                     student_id: studentId,
                     educator_id: educatorId,
                     score: score,
-                    time_taken: timeTaken,
-                    status: "Completed"
+                    time_taken: timeTaken
                 },
                 success: function() {
-                    alert("Game completed! Final Score: " + score);
+                    alert("Progress saved! Final Score: " + score);
                 },
                 error: function() {
                     alert("Error saving progress.");
