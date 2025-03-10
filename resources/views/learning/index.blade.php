@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h2>All Available Learning Modules</h2>
+        <h2> Learning Materials</h2>
 
         <!-- Choose Level Button -->
         <a href="{{ route('choose.level') }}" class="btn btn-primary mb-3">Choose Level</a>
@@ -31,14 +31,14 @@
                                 </video>
                             @endif
 
-                            <!-- Delete Button Form (Only for Admin) -->
+                          {{--  <!-- Delete Button Form (Only for Admin) -->
                             @if(Auth::user()->role == 'admin')
                                 <form action="{{ route('learning.destroy', $material->id) }}" method="POST" class="mt-2">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
-                            @endif
+                            @endif--}}
                         </div>
                     </div>
                 </div>

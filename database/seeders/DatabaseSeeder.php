@@ -6,6 +6,7 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,20 +15,37 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        // Create an Admin user
-        User::factory()->create([
+        // Create an Admin User
+        User::create([
             'name' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'role' => 'admin',  // Assuming your `users` table has a `role` column
-            'password' => bcrypt('test12345'), // Default password for admin
-            'user_id' => 'A00000',
+            'email' => 'admin@school.com',
+            'password' => Hash::make('password123'), // Change for security
+            'role' => 'admin',
+            'user_id' => 1, // Set based on your logic
         ]);
 
+        // Create Pre-registered Educators
+        $educators = [
+            [
+                'name' => 'Alice Johnson',
+                'email' => 'alice@school.com',
+                'password' => Hash::make('password123'),
+                'role' => 'educator',
+                'user_id' => 'ED10001',
+            ],
+            [
+                'name' => 'Bob Smith',
+                'email' => 'bob@school.com',
+                'password' => Hash::make('password123'),
+                'role' => 'educator',
+                'user_id' => 'ED10002',
+            ],
+        ];
 
+        foreach ($educators as $educator) {
+            User::create($educator);
+        }
     }
-
 
 }
 

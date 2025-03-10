@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\EducatorController;
 use App\Http\Controllers\LearningModuleController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Auth;
@@ -36,8 +37,10 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 // Student Dashboard
 Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
-Route::get('/student', [StudentController::class, 'index'])->name('students.index');
-
+Route::get('/student', [StudentController::class, 'index'])->name('student.index');
+Route::get('/{student}/edit', [StudentController::class, 'edit'])->name('student.edit'); // Edit student form
+Route::put('/{student}', [StudentController::class, 'update'])->name('student.update'); // Update student
+Route::delete('/{student}', [StudentController::class, 'destroy'])->name('student.destroy'); // Delete student
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/learning', [LearningModuleController::class, 'index'])->name('learning.index');
@@ -54,3 +57,5 @@ Route::get('/activity/intermediate', [ActivityController::class, 'intermediate']
     ->name('activity.intermediate');
 Route::get('/activity/basicLetterTracing', [ActivityController::class, 'basicLetterTracing'])
     ->name('activity.basicLetterTracing');
+
+Route::get('/educators', [EducatorController::class, 'index'])->name('educator.index');

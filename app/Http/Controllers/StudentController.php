@@ -16,12 +16,10 @@ class StudentController extends Controller
     // Show educator dashboard if the user is an educator
     public function index()
     {
-        if (auth()->check() && auth()->user()->role === 'educator') {
-            return view('educator.dashboard');
-        } else {
-            return redirect()->route('home')->with('error', 'Access Denied!');
-        }
+        $students = Student::all(); // Fetch all students
+        return view('student.index', compact('students'));
     }
+
 
     // Show add student form
     public function create()
@@ -37,7 +35,6 @@ class StudentController extends Controller
             'full_name' => 'required|string|max:255',
             'ic_number' => 'required|string|unique:students,ic_number',
             'age' => 'required|integer',
-            'address' => 'required|string',
             'guardian_name' => 'required|string|max:255',
             'contact_number' => 'required|string|max:255',
             'email' => 'nullable|email',
@@ -66,7 +63,6 @@ class StudentController extends Controller
             'full_name' => $validatedData['full_name'],
             'ic_number' => $validatedData['ic_number'],
             'age' => $validatedData['age'],
-            'address' => $validatedData['address'],
             'guardian_name' => $validatedData['guardian_name'],
             'contact_number' => $validatedData['contact_number'],
             'educator_user_id' => Auth::user()->user_id,  // Current authenticated educator
@@ -92,9 +88,21 @@ class StudentController extends Controller
         return view('student.dashboard');
     }
 
-    // Show Learning Module
-    public function learningModule()
+    public function destroy($id)
     {
-        return view('student.learning-module.animal-recognition');
+        $student = Student::findOrFail($id);
+
+        // Find and delete the guardian user
+        $parentUser = User::where('name', $student->guardian_name)->first();
+        if ($parentUser) {
+            Log::info("Deleting guardian user: " . $parentUser->user_id);
+            $parentUser->delete();
+        }
+
+        // Delete the student
+        $student->delete();
+
+        return redirect()->route('student.index')->with('success', 'Student and parent account deleted successfully.');
     }
+
 }

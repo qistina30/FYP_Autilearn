@@ -1,68 +1,94 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <h1>Add New Student</h1>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h3 class="mb-0"><i class="fas fa-user-plus"></i> Add New Student</h3>
+                    </div>
+                    <div class="card-body">
 
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
+                        <!-- Success & Error Messages -->
+                        @if(session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        @if(session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ session('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        <!-- Student Form -->
+                        <form method="POST" action="{{ route('educator.store-student') }}">
+                            @csrf
+
+                            <div class="row">
+                                <!-- Student Full Name -->
+                                <div class="col-md-6">
+                                    <label for="full_name" class="form-label"><i class="fas fa-user"></i> Student Name</label>
+                                    <input type="text" class="form-control" id="full_name" name="full_name" required placeholder="Enter student name">
+                                </div>
+
+                                <!-- IC Number -->
+                                <div class="col-md-6">
+                                    <label for="ic_number" class="form-label"><i class="fas fa-id-card"></i> MyKid/IC Number</label>
+                                    <input type="text" class="form-control" id="ic_number" name="ic_number" required placeholder="Enter MyKid/IC number">
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <!-- Age -->
+                                <div class="col-md-6">
+                                    <label for="age" class="form-label"><i class="fas fa-birthday-cake"></i> Age</label>
+                                    <input type="number" class="form-control" id="age" name="age" required placeholder="Enter age">
+                                </div>
+
+                            </div>
+
+                            <div class="row mt-3">
+                                <!-- Guardian Name -->
+                                <div class="col-md-6">
+                                    <label for="parent_name" class="form-label"><i class="fas fa-user-shield"></i> Guardian Name</label>
+                                    <input type="text" class="form-control" id="parent_name" name="guardian_name" required placeholder="Enter guardian name">
+                                </div>
+
+                                <!-- Guardian Contact -->
+                                <div class="col-md-6">
+                                    <label for="contact_number" class="form-label"><i class="fas fa-phone"></i> Guardian Contact Number</label>
+                                    <input type="text" class="form-control" id="contact_number" name="contact_number" required placeholder="Enter contact number">
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <!-- Guardian Email -->
+                                <div class="col-md-12">
+                                    <label for="email" class="form-label"><i class="fas fa-envelope"></i> Guardian Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" required placeholder="Enter email ">
+                                </div>
+                            </div>
+
+                            <!-- Submit & Reset Buttons -->
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-success px-5">
+                                    <i class="fas fa-save"></i> Save Student
+                                </button>
+                                <button type="reset" class="btn btn-warning px-4">
+                                    <i class="fas fa-redo"></i> Reset
+                                </button>
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
             </div>
-        @endif
-
-        @if(session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        <form method="POST" action="{{ route('educator.store-student') }}">
-            @csrf
-
-            <!-- Student Full Name -->
-            <div class="form-group">
-                <label for="full_name">Student Name</label>
-                <input type="text" class="form-control" id="full_name" name="full_name" required>
-            </div>
-
-            <!-- IC Number -->
-            <div class="form-group">
-                <label for="ic_number">IC Number</label>
-                <input type="text" class="form-control" id="ic_number" name="ic_number" required>
-            </div>
-
-            <!-- Age -->
-            <div class="form-group">
-                <label for="age">Age</label>
-                <input type="number" class="form-control" id="age" name="age" required>
-            </div>
-
-            <!-- Address -->
-            <div class="form-group">
-                <label for="address">Address</label>
-                <textarea class="form-control" id="address" name="address" required></textarea>
-            </div>
-
-            <!-- Parent Name -->
-            <div class="form-group">
-                <label for="parent_name">Guardian Name</label>
-                <input type="text" class="form-control" id="parent_name" name="guardian_name" required>
-            </div>
-
-            <!-- Parent Contact Number -->
-            <div class="form-group">
-                <label for="contact_number">Guardian Contact Number</label>
-                <input type="text" class="form-control" id="contact_number" name="contact_number" required>
-            </div>
-
-            <!-- Parent Email -->
-            <div class="form-group">
-                <label for="email">Guardian Email </label>
-                <input type="email" class="form-control" id="email" name="email">
-            </div>
-
-
-            <button type="submit" class="btn btn-primary">Save Student</button>
-        </form>
+        </div>
     </div>
 @endsection

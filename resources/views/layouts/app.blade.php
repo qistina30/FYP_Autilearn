@@ -89,21 +89,37 @@
                             </li>
                         @endif
 
-                        @if (Route::has('register'))
+                      {{--  @if (Route::has('register'))
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                             </li>
-                        @endif
+                        @endif--}}
                     @else
                         @if(Auth::user())
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('educator.dashboard') }}">Dashboard</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('educator.add-student') }}">Add Student</a>
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    Student
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('student.index') }}">
+                                        View Student List
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('educator.add-student') }}">
+                                        Add Student
+                                    </a>
+                                </div>
                             </li>
+
+
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('learning.index') }}">Let's Learn</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('educator.index') }}">View Educator</a>
                             </li>
                         @endif
                         <li class="nav-item dropdown">

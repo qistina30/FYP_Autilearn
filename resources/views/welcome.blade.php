@@ -138,9 +138,9 @@
         @if (Route::has('login'))
             <a href="{{ route('login') }}" class="btn">Login</a>
         @endif
-        @if (Route::has('register'))
+      {{--  @if (Route::has('register'))
             <a href="{{ route('register') }}" class="btn">Register as Educator</a>
-        @endif
+        @endif--}}
     </div>
 </div>
 
@@ -155,7 +155,7 @@
 
     <div class="feature-box">
         <h3>👨‍👩‍👧 For Parents</h3>
-        <p>✓ View real-time progress of your child.<br> ✓ Access personalized learning materials.<br> ✓ Stay connected with educators to ensure the best support for your child.</p>
+        <p>✓ View real-time progress of your child.<br> ✓ Access learning materials.<br> ✓ Stay connected with educators to ensure the best support for your child.</p>
     </div>
 
     <div class="feature-box">

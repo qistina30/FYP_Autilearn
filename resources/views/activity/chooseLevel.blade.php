@@ -2,11 +2,9 @@
 
 @section('content')
 
-    <head>
-        <title>Choose Learning Level</title>
-    </head>
+
     <body>
-    <h1>Choose Your Learning Level</h1>
+    <h1>Choose Your Activity Level</h1>
 
     <div class="level-container">
         <a href="#" id="basicBtn" class="level-button">Basic</a>
@@ -19,7 +17,7 @@
         <h3>Basic Level Activities</h3>
         <ul>
             <li><a href="{{ route('activity.basic') }}">Find the Missing Letter</a></li>
-            <li><a href="{{ route('activity.basicLetterTracing') }}">Letter Tracing</a></li>
+            <li><a href="{{ route('activity.basicLetterTracing') }}">Match the Letter</a></li>
         </ul>
     </div>
 
