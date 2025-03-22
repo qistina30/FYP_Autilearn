@@ -5,7 +5,7 @@
         <h2> Learning Materials</h2>
 
         <!-- Choose Level Button -->
-        <a href="{{ route('choose.level') }}" class="btn btn-primary mb-3">Choose Level</a>
+        <a href="{{ route('choose.level') }}" class="btn btn-primary mb-3">Choose Activity</a>
 
         <!-- Add New Learning Material Button -->
         @if(Auth::user()->role == 'admin' || Auth::user()->role == 'educator')

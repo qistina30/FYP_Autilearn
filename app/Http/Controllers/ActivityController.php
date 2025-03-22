@@ -5,25 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use App\Models\StudentProgress;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ActivityController extends Controller
 {
-    public function hard()
+    public function math()
     {
-        $students = Student::all(); // Fetch all students
-        return view('activity.hard', compact('students')); // Pass students to the view
+        $students = Student::all(); // Assuming you have a Student model
+
+        return view('activity.math', compact('students'));
     }
     public function basic()
     {
         $students = Student::all(); // Fetch all students
         return view('activity.basic', compact('students')); // Pass students to the view
-    }
-
-    public function basicLetterTracing()
-    {
-        $students = Student::all();
-        return view('activity.basicLetterTracing', compact('students'));
     }
 
 
@@ -39,25 +35,41 @@ class ActivityController extends Controller
     }
 
     // Store student progress
-    public function storeProgress(Request $request): \Illuminate\Http\JsonResponse
+    public function storeProgress(Request $request)
     {
-        $request->validate([
-            'student_id' => 'required|exists:students,id',
-            'educator_id' => 'required|exists:users,user_id',
+        $validated = $request->validate([
+            'student_id' => 'required|integer',
+            'educator_id' => 'required|integer',
+            'activity_id' => 'required|integer',
             'score' => 'required|integer',
             'time_taken' => 'required|integer',
-//            'status' => 'required|string'
         ]);
 
-        StudentProgress::create([
-            'student_id' => $request->student_id,
-            'educator_id' => $request->educator_id,
-            'score' => $request->score,
-            'time_taken' => $request->time_taken,
-//            'status' => $request->status
-        ]);
+        $validated['educator_id'] = Auth::user()->user_id;
 
-        return response()->json(['message' => 'Progress saved successfully']);
+        $progress = StudentProgress::where('student_id', $validated['student_id'])
+            ->where('activity_id', $validated['activity_id'])
+            ->latest('created_at')
+            ->first();
+
+        if ($progress && $progress->attempt_number == 0) {
+            // If there's an existing record with attempt = 0, update it
+            $progress->update([
+                'score' => $validated['score'],
+                'time_taken' => $validated['time_taken'],
+                'educator_id' => $validated['educator_id'],
+                 'attempt_number' => 1
+            ]);
+        } else {
+            // Otherwise, create a new record with a new attempt count
+            $validated['attempt_number'] = ($progress ? $progress->attempt_number + 1 : 0);
+            StudentProgress::create($validated);
+        }
+
+        return response()->json(['message' => 'Progress saved successfully'], 200);
     }
+
+
+
 
 }

@@ -132,7 +132,7 @@
 <!-- Hero Section -->
 <div class="hero">
     <h1>Empowering Every Autistic Child Through Learning</h1>
-    <p>Autilearn is a dedicated learning platform designed for kindergarten educators and parents to help children with autism learn and grow.</p>
+    <p>Autilearn is a dedicated learning platform designed for educators and parents to help children with autism learn and grow.</p>
 
     <div class="cta-buttons">
         @if (Route::has('login'))
@@ -150,12 +150,12 @@
 
     <div class="feature-box">
         <h3>👩‍🏫 For Educators</h3>
-        <p>✓ Create structured learning plans for children with autism.<br> ✓ Track and manage student progress.<br> ✓ Provide a supportive environment with specialized resources.</p>
+        <br> ✓ Track and manage student progress.<br> ✓ Provide a supportive environment with specialized resources.</p>
     </div>
 
     <div class="feature-box">
         <h3>👨‍👩‍👧 For Parents</h3>
-        <p>✓ View real-time progress of your child.<br> ✓ Access learning materials.<br> ✓ Stay connected with educators to ensure the best support for your child.</p>
+        <p>✓ View real-time progress of your child.<br> ✓ Stay connected with educators to ensure the best support for your child.</p>
     </div>
 
     <div class="feature-box">

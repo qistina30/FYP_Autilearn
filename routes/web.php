@@ -49,13 +49,12 @@ Route::get('/learning/create', [LearningModuleController::class, 'create'])->nam
 Route::delete('/learning/{id}', [LearningModuleController::class, 'destroy'])->name('learning.destroy');
 
 
-Route::get('/activity/hard', [ActivityController::class, 'hard'])->name('activity.hard');
+//Route::get('/activity/hard', [ActivityController::class, 'hard'])->name('activity.hard');
 Route::get('/activity/choose-level', [ActivityController::class, 'chooseLevel'])->name('choose.level');
 Route::post('/activity/store-progress', [ActivityController::class, 'storeProgress'])->name('activity.store-progress');
 Route::get('/activity/basic', [ActivityController::class, 'basic'])->name('activity.basic');
 Route::get('/activity/intermediate', [ActivityController::class, 'intermediate'])
     ->name('activity.intermediate');
-Route::get('/activity/basicLetterTracing', [ActivityController::class, 'basicLetterTracing'])
-    ->name('activity.basicLetterTracing');
+Route::get('/activity/math', [ActivityController::class, 'math'])->name('activity.math');
 
 Route::get('/educators', [EducatorController::class, 'index'])->name('educator.index');

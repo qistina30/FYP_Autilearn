@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\LearningActivity;
+use App\Models\Activity;
 use App\Models\LearningMaterial;
 use Database\Seeders\LearningActivitySeeder;
 use Illuminate\Http\Request;

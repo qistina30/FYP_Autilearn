@@ -43,14 +43,6 @@
                                 </div>
                             </div>
 
-                            <div class="row mt-3">
-                                <!-- Age -->
-                                <div class="col-md-6">
-                                    <label for="age" class="form-label"><i class="fas fa-birthday-cake"></i> Age</label>
-                                    <input type="number" class="form-control" id="age" name="age" required placeholder="Enter age">
-                                </div>
-
-                            </div>
 
                             <div class="row mt-3">
                                 <!-- Guardian Name -->

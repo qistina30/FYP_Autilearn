@@ -10,7 +10,7 @@ class StudentProgress extends Model
     use HasFactory;
 
     protected $fillable = [
-        'student_id', 'educator_id', 'score', 'time_taken', 'status'
+        'student_id', 'educator_id', 'score', 'time_taken', 'status','activity_id','attempt_number'
     ];
 
     public function student()
@@ -22,6 +22,11 @@ class StudentProgress extends Model
     {
         return $this->belongsTo(User::class, 'educator_id', 'user_id') // Match `educator_id` with `user_id`
         ->where('role', 'educator'); // Ensure it's an educator
+    }
+
+    public function activity()
+    {
+        return $this->belongsTo(Activity::class, 'activity_id');
     }
 }
 
