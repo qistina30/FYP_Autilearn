@@ -16,6 +16,12 @@ class ActivityController extends Controller
 
         return view('activity.math', compact('students'));
     }
+    public function spellingBee()
+    {
+        $students = Student::all(); // Assuming you have a Student model
+
+        return view('activity.spellingBee', compact('students'));
+    }
     public function basic()
     {
         $students = Student::all(); // Fetch all students

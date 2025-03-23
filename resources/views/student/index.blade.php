@@ -16,7 +16,6 @@
                 <th>ID</th>
                 <th>Full Name</th>
                 <th>IC Number</th>
-                <th>Age</th>
                 <th>Guardian Name</th>
                 <th>Contact Number</th>
                 <th>Email</th>
@@ -29,7 +28,6 @@
                     <td>{{ $student->id }}</td>
                     <td>{{ $student->full_name }}</td>
                     <td>{{ $student->ic_number }}</td>
-                    <td>{{ $student->age }}</td>
                     <td>{{ $student->guardian_name }}</td>
                     <td>{{ $student->contact_number }}</td>
                     <td>{{ $student->email ?? 'N/A' }}</td>

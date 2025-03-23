@@ -3,12 +3,13 @@
 @section('content')
 
 
-    <h1>Choose Your Activity </h1>
+    <h1>Choose Subject </h1>
 
     <div class="level-container">
-        <a href="{{ route('activity.basic') }}">Basic</a>
-        <a href="{{ route('activity.intermediate') }}" class="level-button">Intermediate</a>
+        <a href="{{ route('activity.basic') }}">Science</a>
+        <a href="{{ route('activity.intermediate') }}" class="level-button">Unscrambled</a>
         <a href="{{ route('activity.math') }}" class="level-button">Math</a>
+        <a href="{{ route('activity.spellingBee') }}" class="level-button">Spelling Bee</a>
     </div>
 
 

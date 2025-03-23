@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+{{--    <img id="animalImage" src="{{ asset('images/dog.jpg') }}" class="animal-image">--}}
+
     <style>
         body {
             text-align: center;
@@ -28,7 +30,6 @@
             color: #333;
         }
 
-        /* Image Container */
         .image-container {
             margin-top: 20px;
             padding: 15px;
@@ -41,7 +42,6 @@
             box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
         }
 
-        /* Answer Buttons */
         .answer-btn {
             width: 220px;
             padding: 14px;
@@ -61,7 +61,6 @@
             background: linear-gradient(to bottom, #ff9900, #ff6600);
         }
 
-        /* Correct & Wrong Answers */
         .correct {
             background: linear-gradient(to bottom, #32cd32, #228b22) !important;
             border: 3px solid #2e8b57 !important;
@@ -79,9 +78,8 @@
         <div class="container">
             <h1 class="title">🐾 Image Recognition Activity</h1>
 
-            <!-- Select Student Dropdown -->
-            <div class="mb-3">
-                <label for="studentSelect" class="info">👩‍🎓 Select Student:</label>
+            <div>
+                <label for="studentSelect"><strong>Select Student:</strong></label>
                 <select id="studentSelect" class="form-control select2">
                     <option value="">-- Select Student --</option>
                     @foreach($students as $student)
@@ -90,20 +88,17 @@
                 </select>
             </div>
 
-            <p class="info">⏳ Time: <span id="timer">0</span> seconds</p>
-            <p class="info">⭐ Score: <span id="score">0</span></p>
+            <p class="info-box">⏳ Time: <span id="timer">0</span> seconds</p>
+            <p class="info-box">⭐ Score: <span id="score">0</span></p>
 
-            <!-- Hidden Input for Educator ID -->
             <input type="hidden" id="educator_id" value="{{ Auth::id() }}">
 
-            <!-- Game Controls -->
             <div class="button-group">
                 <button id="startBtn" class="btn btn-success btn-lg">Start 🎮</button>
                 <button id="restartBtn" class="btn btn-warning btn-lg" disabled>Restart 🔄</button>
                 <button id="submitBtn" class="btn btn-primary btn-lg" disabled>Submit ✅</button>
             </div>
 
-            <!-- Game Board -->
             <div class="image-container">
                 <img id="animalImage" src="" class="animal-image" alt="Animal Image" hidden>
             </div>
@@ -119,10 +114,10 @@
                 let correctAnswer;
 
                 let animalImages = [
-                    { url: "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg", name: "Dog" },
-                    { url: "https://images.pexels.com/photos/104827/cat-pet-animal-domestic-104827.jpeg", name: "Cat" },
-                    { url: "https://images.pexels.com/photos/162223/lion-big-cat-predator-mane-162223.jpeg", name: "Lion" },
-                    { url: "https://images.pexels.com/photos/667205/pexels-photo-667205.jpeg", name: "Elephant" }
+                    { url: "{{ asset('images/dog.jpg') }}", name: "Dog" },
+                    { url: "{{ asset('images/cat.jpg') }}", name: "Cat" },
+                    { url: "{{ asset('images/lion.jpg') }}", name: "Lion" },
+                    { url: "{{ asset('images/elephant.jpg') }}", name: "Elephant" }
                 ];
 
                 function startGame() {
@@ -160,7 +155,7 @@
                     let studentId = $("#studentSelect").val();
                     let timeTaken = $("#timer").text();
                     let educatorId = $("#educator_id").val();
-                    let activityId = 4; // Change this ID for this activity
+                    let activityId = 4;
 
                     $.ajax({
                         url: "{{ route('activity.store-progress') }}",
@@ -185,6 +180,8 @@
                     $("#submitBtn").prop("disabled", true);
                 }
 
+                let usedAnimals = [];
+
                 function generateAnimalQuestion() {
                     if (questionCount >= totalRounds) {
                         stopGame();
@@ -193,17 +190,30 @@
                         return;
                     }
 
-                    let randomAnimal = animalImages[Math.floor(Math.random() * animalImages.length)];
-                    correctAnswer = randomAnimal.name;
+                    // Get a new image that hasn't been used yet
+                    let availableAnimals = animalImages.filter(a => !usedAnimals.includes(a.name));
 
-                    // Ensure image is cleared before loading a new one
+                    if (availableAnimals.length === 0) {
+                        // Reset used images if all have been shown
+                        usedAnimals = [];
+                        availableAnimals = [...animalImages];
+                    }
+
+                    let randomAnimal = availableAnimals[Math.floor(Math.random() * availableAnimals.length)];
+                    correctAnswer = randomAnimal.name;
+                    usedAnimals.push(correctAnswer); // Mark as used
+
                     $("#animalImage").attr("src", "").hide();
 
                     let img = new Image();
                     img.src = randomAnimal.url;
 
                     img.onload = function () {
-                        $("#animalImage").attr("src", randomAnimal.url).show();
+                        $("#animalImage").attr("src", img.src).removeAttr("hidden").show();
+                    };
+
+                    img.onerror = function () {
+                        alert("Image failed to load. Please try again.");
                     };
 
                     let allAnswers = [...animalImages.map(a => a.name)];

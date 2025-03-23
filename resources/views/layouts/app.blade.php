@@ -103,7 +103,7 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('learning.index') }}">Let's Learn</a>
+                        <a class="nav-link" href="{{ route('choose.level') }}">Let's Learn</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('educator.index') }}">View Educator</a>

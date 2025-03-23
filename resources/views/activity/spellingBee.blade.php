@@ -2,7 +2,6 @@
 
 @section('content')
     <style>
-        /* Page Background */
         body {
             text-align: center;
             font-family: 'Poppins', Arial, sans-serif;
@@ -17,7 +16,6 @@
             flex-direction: column;
         }
 
-        /* Title */
         .title {
             font-size: 40px;
             color: #007BFF;
@@ -26,7 +24,6 @@
             text-shadow: 2px 2px 10px rgba(0, 123, 255, 0.3);
         }
 
-        /* Score & Timer */
         .info-box {
             display: flex;
             justify-content: center;
@@ -43,7 +40,6 @@
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* Game Board */
         .game-board {
             margin-top: 25px;
             display: flex;
@@ -57,69 +53,77 @@
             width: 400px;
         }
 
-        /* Question */
-        .question {
-            font-size: 26px;
-            font-weight: bold;
-            color: #333;
-            background: #ffeb99;
+        .spell-input {
+            width: 80%;
             padding: 12px;
-            border-radius: 12px;
+            font-size: 20px;
+            border: 2px solid #007BFF;
+            border-radius: 8px;
+            text-align: center;
+            outline: none;
         }
 
-        /* Answer Buttons */
-        .answer-btn {
-            width: 230px;
+        .spell-input.correct {
+            border-color: green;
+            background: #d4edda;
+        }
+
+        .spell-input.wrong {
+            border-color: red;
+            background: #f8d7da;
+        }
+
+        .btn {
+            width: 180px;
             padding: 14px;
-            font-size: 24px;
+            font-size: 18px;
             font-weight: bold;
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
-            color: white;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .answer-btn:hover {
+        .btn:hover {
             transform: scale(1.05);
         }
 
-        /* Button Colors */
-        .btn-yellow { background: #ffcc00; border: 3px solid #ff9900; }
-        .btn-yellow:hover { background: #ff9900; }
-
-        /* Correct & Wrong Answers */
-        .correct {
-            background: linear-gradient(to bottom, #32cd32, #228b22) !important;
-            border: 3px solid #2e8b57 !important;
-            animation: correctShake 0.3s ease-in-out;
+        .btn-yellow {
+            background: #ffcc00;
+            border: 3px solid #ff9900;
+            color: white;
         }
 
-        .wrong {
-            background: linear-gradient(to bottom, #dc143c, #8b0000) !important;
-            border: 3px solid #b22222 !important;
-            animation: wrongShake 0.3s ease-in-out;
+        .btn-yellow:hover {
+            background: #ff9900;
         }
 
-        @keyframes correctShake {
-            0% { transform: scale(1.1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1.1); }
+        .btn-green {
+            background: #28a745;
+            border: 3px solid #218838;
+            color: white;
         }
 
-        @keyframes wrongShake {
-            0%, 100% { transform: translateX(0); }
-            25%, 75% { transform: translateX(-6px); }
-            50% { transform: translateX(6px); }
+        .btn-green:hover {
+            background: #218838;
         }
 
+        .btn-red {
+            background: #dc3545;
+            border: 3px solid #c82333;
+            color: white;
+        }
+
+        .btn-red:hover {
+            background: #c82333;
+        }
     </style>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <div class="content-wrapper">
         <div class="container">
-            <h1 class="title">🎯 Math Activity 🎯</h1>
+            <h1 class="title">🎤 Spelling Bee Game 📝</h1>
 
             <div>
                 <label for="studentSelect"><strong>Select Student:</strong></label>
@@ -136,7 +140,6 @@
                 <p class="info">⭐ Score: <span id="score">0</span></p>
             </div>
 
-            <!-- Hidden Input for Educator ID -->
             <input type="hidden" id="educator_id" value="{{ Auth::id() }}">
 
             <!-- Game Controls -->
@@ -146,8 +149,7 @@
                 <button id="submitBtn" class="btn btn-primary btn-lg" disabled>Submit ✅</button>
             </div>
 
-            <!-- Game Board -->
-            <div id="mathGameBoard" class="game-board"></div>
+            <div id="spellingGameBoard" class="game-board"></div>
         </div>
     </div>
 
@@ -156,7 +158,8 @@
             let timer = 0, score = 0, isRunning = false;
             let interval, questionCount = 0;
             const totalRounds = 5;
-            let correctAnswer;
+            let currentWord;
+            let words = ["elephant", "banana", "giraffe", "umbrella", "chocolate"];
 
             function startGame() {
                 let studentId = $("#studentSelect").val();
@@ -180,7 +183,7 @@
                 $("#startBtn").prop("disabled", true);
                 $("#submitBtn").prop("disabled", true);
 
-                generateMathQuestion();
+                nextWord();
             }
 
             function stopGame() {
@@ -193,7 +196,7 @@
                 let studentId = $("#studentSelect").val();
                 let timeTaken = $("#timer").text();
                 let educatorId = $("#educator_id").val();
-                let activityId = 3;
+                let activityId = 5;
 
                 $.ajax({
                     url: "{{ route('activity.store-progress') }}",
@@ -219,34 +222,43 @@
                 $("#submitBtn").prop("disabled", true);
             }
 
-            function generateMathQuestion() {
+            function nextWord() {
                 if (questionCount >= totalRounds) {
                     stopGame();
                     $("#submitBtn").prop("disabled", false);
-                    $("#mathGameBoard").html("<p class='question'>🎉 Well Done! Click Submit to save progress.</p>");
+                    $("#spellingGameBoard").html("<p class='question'>🎉 Well Done! Click Submit to save progress.</p>");
                     return;
                 }
 
-                let num1 = Math.floor(Math.random() * 10) + 1;
-                let num2 = Math.floor(Math.random() * 10) + 1;
-                correctAnswer = num1 + num2;
-                let allAnswers = [correctAnswer, correctAnswer + 1, correctAnswer - 1, correctAnswer + 2]
-                    .sort(() => Math.random() - 0.5);
+                currentWord = words[Math.floor(Math.random() * words.length)];
+                let msg = new SpeechSynthesisUtterance(currentWord);
+                speechSynthesis.speak(msg);
 
-                $("#mathGameBoard").html(`
-                    <p class="question">${num1} + ${num2} = ?</p>
-                    ${allAnswers.map(answer => `<button class="answer-btn btn-yellow" data-answer="${answer}">${answer}</button>`).join('')}
-                `);
+                $("#spellingGameBoard").html(`
+        <p class="question">🔊 Listen to the word & spell it:</p>
+        <button id="listenAgain" class="btn btn-blue">Listen Again 🔊</button>
+        <input type="text" id="spellInput" class="spell-input">
+        <button id="checkAnswer" class="btn btn-yellow">Check ✅</button>
+    `);
 
-                $(".answer-btn").click(function () {
-                    let selectedAnswer = $(this).data("answer");
-                    $(this).addClass(selectedAnswer === correctAnswer ? "correct" : "wrong");
-                    score += selectedAnswer === correctAnswer ? 10 : 0;
+                $("#listenAgain").click(() => {
+                    speechSynthesis.speak(msg);
+                });
+
+                $("#checkAnswer").click(() => {
+                    let userAnswer = $("#spellInput").val().trim().toLowerCase();
+                    if (userAnswer === currentWord) {
+                        $("#spellInput").addClass("correct");
+                        score += 10;
+                    } else {
+                        $("#spellInput").addClass("wrong");
+                    }
                     $("#score").text(score);
                     questionCount++;
-                    setTimeout(generateMathQuestion, 1000);
+                    setTimeout(nextWord, 1000);
                 });
             }
+
 
             $("#startBtn").click(startGame);
             $("#restartBtn").click(() => { stopGame(); startGame(); });

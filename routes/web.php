@@ -56,5 +56,5 @@ Route::get('/activity/basic', [ActivityController::class, 'basic'])->name('activ
 Route::get('/activity/intermediate', [ActivityController::class, 'intermediate'])
     ->name('activity.intermediate');
 Route::get('/activity/math', [ActivityController::class, 'math'])->name('activity.math');
-
+Route::get('/activity/spellingBee', [ActivityController::class, 'spellingBee'])->name('activity.spellingBee');
 Route::get('/educators', [EducatorController::class, 'index'])->name('educator.index');
