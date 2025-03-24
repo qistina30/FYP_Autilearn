@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-{{--    <img id="animalImage" src="{{ asset('images/dog.jpg') }}" class="animal-image">--}}
 
     <style>
         body {

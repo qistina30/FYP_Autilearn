@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\EducatorController;
 use App\Http\Controllers\LearningModuleController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -38,8 +39,8 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 // Student Dashboard
 Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
 Route::get('/student', [StudentController::class, 'index'])->name('student.index');
-Route::get('/{student}/edit', [StudentController::class, 'edit'])->name('student.edit'); // Edit student form
-Route::put('/{student}', [StudentController::class, 'update'])->name('student.update'); // Update student
+//Route::get('/{student}/edit', [StudentController::class, 'edit'])->name('student.edit'); // Edit student form
+//Route::put('/{student}', [StudentController::class, 'update'])->name('student.update'); // Update student
 Route::delete('/{student}', [StudentController::class, 'destroy'])->name('student.destroy'); // Delete student
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -58,3 +59,9 @@ Route::get('/activity/intermediate', [ActivityController::class, 'intermediate']
 Route::get('/activity/math', [ActivityController::class, 'math'])->name('activity.math');
 Route::get('/activity/spellingBee', [ActivityController::class, 'spellingBee'])->name('activity.spellingBee');
 Route::get('/educators', [EducatorController::class, 'index'])->name('educator.index');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+});
+

@@ -159,7 +159,7 @@
             let interval, questionCount = 0;
             const totalRounds = 5;
             let currentWord;
-            let words = ["elephant", "banana", "giraffe", "umbrella", "chocolate"];
+            let words = ["cat", "dog", "sun", "hat", "red", "big", "run", "jump", "fish", "happy"];
 
             function startGame() {
                 let studentId = $("#studentSelect").val();
@@ -230,16 +230,16 @@
                     return;
                 }
 
-                currentWord = words[Math.floor(Math.random() * words.length)];
+                currentWord = words.splice(Math.floor(Math.random() * words.length), 1)[0]; // Ensures no repetition
                 let msg = new SpeechSynthesisUtterance(currentWord);
                 speechSynthesis.speak(msg);
 
                 $("#spellingGameBoard").html(`
-        <p class="question">🔊 Listen to the word & spell it:</p>
-        <button id="listenAgain" class="btn btn-blue">Listen Again 🔊</button>
-        <input type="text" id="spellInput" class="spell-input">
-        <button id="checkAnswer" class="btn btn-yellow">Check ✅</button>
-    `);
+                <p class="question">🔊 Listen to the word & spell it:</p>
+                <button id="listenAgain" class="btn btn-blue">Listen Again 🔊</button>
+                <input type="text" id="spellInput" class="spell-input">
+                <button id="checkAnswer" class="btn btn-yellow">Check ✅</button>
+            `);
 
                 $("#listenAgain").click(() => {
                     speechSynthesis.speak(msg);
@@ -259,10 +259,10 @@
                 });
             }
 
-
             $("#startBtn").click(startGame);
             $("#restartBtn").click(() => { stopGame(); startGame(); });
             $("#submitBtn").click(submitGame);
         });
     </script>
+
 @endsection

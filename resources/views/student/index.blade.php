@@ -32,7 +32,7 @@
                     <td>{{ $student->contact_number }}</td>
                     <td>{{ $student->email ?? 'N/A' }}</td>
                     <td>
-                        <a href="{{ route('student.edit', $student->id) }}" class="btn btn-primary btn-sm">Edit</a>
+{{--                        <a href="{{ route('student.edit', $student->id) }}" class="btn btn-primary btn-sm">Edit</a>--}}
                         <form action="{{ route('student.destroy', $student->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')

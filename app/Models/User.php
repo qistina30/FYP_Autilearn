@@ -29,5 +29,10 @@ class User extends Authenticatable
         return $this->hasMany(Student::class, 'educator_user_id', 'user_id');
     }
 
+    public function children()
+    {
+        return $this->hasMany(Student::class, 'guardian_name', 'name');
+    }
+
 
 }

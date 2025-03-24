@@ -8,10 +8,11 @@ use App\Models\StudentProgress;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session;
+use App\Mail\GuardianAccountDetails;
+use Illuminate\Support\Facades\Mail;
 use Exception;
 
 class StudentController extends Controller
@@ -54,14 +55,26 @@ class StudentController extends Controller
             $lastId = $lastUser ? (int) substr($lastUser->user_id, 6) : 0;
             $user_id = 'PA' . str_pad($lastId + 1, 5, '0', STR_PAD_LEFT);
 
+            // Define default password
+            $defaultPassword = 'test12345';
+
             // Create the parent user
             $parentUser = User::create([
                 'user_id' => $user_id,
                 'name' => $validatedData['guardian_name'],
                 'email' => $validatedData['email'],
-                'password' => Hash::make('test12345'),
+                'password' => Hash::make($defaultPassword),
                 'role' => 'guardian',
             ]);
+
+            // Send notification email to the guardian
+            if ($validatedData['email']) {
+                Mail::to($validatedData['email'])->send(new GuardianAccountDetails(
+                    $validatedData['guardian_name'],
+                    $user_id,
+                    $defaultPassword
+                ));
+            }
 
             // Create the student
             $student = Student::create([
@@ -92,14 +105,12 @@ class StudentController extends Controller
                 }
             }
 
-            return redirect()->route('educator.add-student')->with('success', 'Student and parent account created successfully.');
+            return redirect()->route('educator.add-student')->with('success', 'Student and parent account created successfully. Email sent to guardian.');
 
         } catch (\Exception $e) {
             return redirect()->route('educator.add-student')->with('error', 'Error: ' . $e->getMessage());
         }
     }
-
-
 
 
     // Student Dashboard
