@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -26,7 +28,7 @@
     <style>
         /* Background color */
         body {
-            background-color: #ADD8E6 !important; /* Light Blue */
+            background-color: #ADD8E6 ;
             font-family: 'Nunito', sans-serif;
             height: 100vh;
             margin: 0;
