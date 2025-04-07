@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\DB;
 
 class ActivityController extends Controller
 {
+    public function welcome()
+    {
+        return view('activity.welcome');
+    }
     public function math()
     {
         $students = Student::all(); // Assuming you have a Student model
@@ -22,10 +26,10 @@ class ActivityController extends Controller
 
         return view('activity.spellingBee', compact('students'));
     }
-    public function basic()
+    public function start()
     {
         $students = Student::all(); // Fetch all students
-        return view('activity.basic', compact('students')); // Pass students to the view
+        return view('activity.start', compact('students')); // Pass students to the view
     }
 
 

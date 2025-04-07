@@ -3,6 +3,8 @@
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=OpenDyslexic:wght@400;700&display=swap" rel="stylesheet">
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -105,7 +107,7 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('choose.level') }}">Let's Learn</a>
+                        <a class="nav-link" href="{{ route('activity.welcome') }}">Let's Learn</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('educator.index') }}">View Educator</a>
@@ -138,6 +140,8 @@
 <main class="content-wrapper">
     @yield('content')
 </main>
+@yield('scripts')
 </body>
+
 
 </html>

@@ -53,7 +53,7 @@ Route::delete('/learning/{id}', [LearningModuleController::class, 'destroy'])->n
 //Route::get('/activity/hard', [ActivityController::class, 'hard'])->name('activity.hard');
 Route::get('/activity/choose-level', [ActivityController::class, 'chooseLevel'])->name('choose.level');
 Route::post('/activity/store-progress', [ActivityController::class, 'storeProgress'])->name('activity.store-progress');
-Route::get('/activity/basic', [ActivityController::class, 'basic'])->name('activity.basic');
+Route::get('/activity/start', [ActivityController::class, 'start'])->name('activity.start');
 Route::get('/activity/intermediate', [ActivityController::class, 'intermediate'])
     ->name('activity.intermediate');
 Route::get('/activity/math', [ActivityController::class, 'math'])->name('activity.math');
@@ -64,4 +64,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 });
+
+Route::get('/activity/video', [ActivityController::class, 'video'])->name('activity.video');
+Route::get('/activity/welcome', [ActivityController::class, 'welcome'])->name('activity.welcome');
 
