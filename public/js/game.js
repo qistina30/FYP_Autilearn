@@ -1,15 +1,19 @@
-// Change background color based on selection
+console.log("Top of game.js - animalData:", typeof animalData, animalData);
+
 $("#themeSelector").on("change", function () {
     let selectedColor = $(this).val();
     $("body").css("background-color", selectedColor);
 });
 
+console.log("animalData:", window.animalData);
+
 $(document).ready(function () {
+    console.log("animalData inside ready():", animalData);
+
     let timer = 0, score = 0, isRunning = false;
     let interval, questionCount = 0;
     const totalRounds = 5;
     let correctAnswer, currentSound;
-
 
     let availableAnimals = [...animalData];
 
@@ -24,22 +28,13 @@ $(document).ready(function () {
         $("#animalImage").attr("src", selectedAnimal.url).show();
     }
 
-    let audioVolume = 1; // Default volume
-
-    // Update volume when the slider changes
-    $("#volumeControl").on("input", function () {
-        let volumeLevel = $(this).val();
-        $("#volumeLabel").text(`🔊 Volume: ${Math.round(volumeLevel * 100)}%`);
-        audioVolume = volumeLevel;
-    });
-
-    function playSound(soundUrl) {
-        if (soundUrl) {
-            let audio = new Audio(soundUrl);
-            audio.volume = audioVolume;
-            audio.onerror = () => console.warn("Audio file not found:", soundUrl);
-            audio.play();
-        }
+    // Remove the duplicate voice control button creation
+    if (!$("#voiceControlBtn").length) {  // Check if the button already exists
+        $("<button id='voiceControlBtn' class='sound-btn' style='width: 100%; margin-top: 10px;'>🎙️ Voice Command</button>")
+            .insertAfter("#playSoundBtn")
+            .on("click", function () {
+                startListening();
+            });
     }
 
     window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -57,9 +52,9 @@ $(document).ready(function () {
         let confidence = event.results[0][0].confidence;
 
         console.log("Recognized:", speechResult, "| Confidence:", confidence);
-        $("#liveTranscript").text(`🗣 ${speechResult}`); // Display live transcript
+        $("#liveTranscript").text(`🗣 ${speechResult}`);
 
-        if (confidence > 0.6) {  // Adjusted threshold
+        if (confidence > 0.6) {
             if (speechResult.includes("start")) $("#startBtn").click();
             else if (speechResult.includes("restart")) $("#restartBtn").click();
             else if (speechResult.includes("submit")) $("#submitBtn").click();
@@ -76,25 +71,21 @@ $(document).ready(function () {
         }
     };
 
-    function getPronunciationVariations(word) {
-        let variations = {
-            "dog": ["dog", "dawg", "doggy"],
-            "cat": ["cat", "kitten", "kitty"],
-            "lion": ["lion", "lyon"],
-            "elephant": ["elephant", "elefants", "ellie"]
-        };
-        return variations[word] || [word];
-    }
-
     recognition.onerror = function (event) {
         console.error("Speech recognition error:", event.error);
     };
 
-    // Add a voice control button
-    $("<button id='voiceControlBtn' class='sound-btn'>🎙️ Voice Command</button>")
-        .insertAfter("#playSoundBtn")
-        .on("click", startListening);
+    function getPronunciationVariations(word) {
+        let variations = {
+            "dog": ["dog", "dawg", "doggy", "anjin"],
+            "cat": ["cat", "kitten", "kitty", "kucing"],
+            "lion": ["lion", "lyon", "singa"],
+            "elephant": ["elephant", "elefants", "ellie", "gajah"]
+        };
+        return variations[word] || [word];
+    }
 
+    // Game Start, Stop, and Submit functions
     function startGame() {
         isRunning = true;
         timer = 0;
@@ -126,81 +117,60 @@ $(document).ready(function () {
         alert("Game progress saved! Final Score: " + score);
     }
 
+    let lang = localStorage.getItem("language") || "en";
+
     const translations = {
         en: {
-            title: "🐾 Image Recognition",
+            title: "🐾 Animal Image Recognition 🐾",
             time: "⏳ Time:",
             score: "⭐ Score:",
-            start: "Start 🎮",
-            restart: "Restart 🔄",
-            submit: "Submit ✅",
-            playSound: "🔊 Play Sound",
+            start: "🎮 Start",
+            restart: "🔄 Restart",
+            submit: "✅ Submit",
+            playSound: "🔊 Play Animal Sound",
             voiceCommand: "🎙️ Voice Command",
             volume: "🔊 Volume:",
             background: "🎨 Background:",
             wellDone: "🎉 Well done! Click Submit to save your progress.",
+            name: {
+                cat: "Cat",
+                dog: "Dog",
+                elephant: "Elephant",
+                tiger: "Tiger",
+                monkey: "Monkey",
+                bird: "Bird",
+                lion: "Lion",
+                cow: "Cow",
+                rabbit: "Rabbit",
+                horse: "Horse"
+            }
         },
         ms: {
-            title: "🐾 Pengecaman Imej",
+            title: "🐾 Pengecaman Imej Haiwan 🐾",
             time: "⏳ Masa:",
             score: "⭐ Markah:",
-            start: "Mula 🎮",
-            restart: "Mulakan Semula 🔄",
-            submit: "Hantar ✅",
-            playSound: "🔊 Mainkan Bunyi",
+            start: "🎮 Mula",
+            restart: "🔄 Mulakan Semula ",
+            submit: "✅ Hantar",
+            playSound: "🔊 Mainkan Bunyi Haiwan",
             voiceCommand: "🎙️ Perintah Suara",
             volume: "🔊 Kelantangan:",
             background: "🎨 Latar Belakang:",
             wellDone: "🎉 Tahniah! Klik Hantar untuk menyimpan kemajuan anda.",
+            name: {
+                cat: "Kucing",
+                dog: "Anjing",
+                elephant: "Gajah",
+                tiger: "Harimau",
+                monkey: "Monyet",
+                bird: "Burung",
+                lion: "Singa",
+                cow: "Lembu",
+                rabbit: "Arnab",
+                horse: "Kuda"
+            }
         }
     };
-
-    function generateAnimalQuestion() {
-        if (questionCount >= totalRounds || availableAnimals.length === 0) {
-            stopGame();
-            $("#submitBtn").prop("disabled", false);
-            $("#answerOptions").html(`<p class='info-box'>${translations[$("#languageSelector").val()].wellDone}</p>`);
-            return;
-        }
-
-        let randomIndex = Math.floor(Math.random() * availableAnimals.length);
-        let selectedAnimal = availableAnimals.splice(randomIndex, 1)[0];
-        correctAnswer = selectedAnimal.name;
-        currentSound = selectedAnimal.sound;
-
-        $("#animalImage").attr("src", selectedAnimal.url).removeAttr("hidden").show();
-        $("#playSoundBtn").show().off("click").on("click", function () {
-            playSound(currentSound);
-        });
-
-        let incorrectAnswers = animalData.filter(a => a.name !== correctAnswer);
-        let randomWrongAnswer = incorrectAnswers.length > 0
-            ? incorrectAnswers[Math.floor(Math.random() * incorrectAnswers.length)].name
-            : "Unknown";
-
-        let allAnswers = [correctAnswer, randomWrongAnswer].sort(() => Math.random() - 0.5);
-
-        $("#answerOptions").html(allAnswers.map(answer =>
-            `<button class="answer-btn" data-answer="${answer}">${answer}</button>`
-        ).join(''));
-
-        $(".answer-btn").off("click").on("click", function () {
-            let selectedAnswer = $(this).data("answer");
-            if (selectedAnswer === correctAnswer) {
-                $(this).addClass("correct");
-                score += 10;
-                playSound("{{ asset('sounds/correct.mp3') }}");
-            } else {
-                $(this).addClass("wrong");
-                playSound("{{ asset('sounds/wrong.mp3') }}");
-            }
-            $("#score").text(score);
-            questionCount++;
-            setTimeout(generateAnimalQuestion, 1000);
-        });
-    }
-
-
 
     function updateLanguage() {
         let selectedLang = $("#languageSelector").val();
@@ -216,6 +186,80 @@ $(document).ready(function () {
         $("#voiceControlBtn").text(langData.voiceCommand);
         $("#volumeLabel").text(`${langData.volume} ${Math.round($("#volumeControl").val() * 100)}%`);
         $("label[for='themeSelector']").text(langData.background);
+    }
+
+    // Function to generate animal question and options dynamically
+    function generateAnimalQuestion() {
+        if (questionCount >= totalRounds || availableAnimals.length === 0) {
+            stopGame();
+            $("#submitBtn").prop("disabled", false);
+            $("#answerOptions").html(`<p class='info-box'>${translations[$("#languageSelector").val()].wellDone}</p>`);
+            return;
+        }
+
+        let randomIndex = Math.floor(Math.random() * availableAnimals.length);
+        let selectedAnimal = availableAnimals.splice(randomIndex, 1)[0];
+        correctAnswer = selectedAnimal.name;
+        currentSound = selectedAnimal.sound;
+        const audio = new Audio(currentSound);
+        audio.volume = typeof audioVolume !== 'undefined' ? audioVolume : 1;
+        audio.play();
+        $("#animalImage").attr("src", selectedAnimal.url).removeAttr("hidden").show();
+        $("#playSoundBtn").show().off("click").on("click", function () {
+            playSound(currentSound);
+        });
+
+        let incorrectAnswers = animalData.filter(a => a.name !== correctAnswer);
+        let randomWrongAnswer = incorrectAnswers.length > 0
+            ? incorrectAnswers[Math.floor(Math.random() * incorrectAnswers.length)].name
+            : "Unknown";
+
+        let allAnswers = [correctAnswer, randomWrongAnswer].sort(() => Math.random() - 0.5);
+
+        $("#answerOptions").html(allAnswers.map(answer =>
+            `<button class="answer-btn" data-answer="${answer}">${translations[$("#languageSelector").val()].name[answer] || answer}</button>`
+        ).join(''));
+
+        function playSound(soundUrl) {
+            if (soundUrl) {
+                let audio = new Audio(soundUrl);
+                audio.volume = audioVolume;
+                audio.play().catch(error => {
+                    console.error("Error playing sound:", error);
+                });
+            } else {
+                console.warn("No sound URL provided.");
+            }
+        }
+
+        $(".answer-btn").off("click").on("click", function () {
+            let selectedAnswer = $(this).data("answer");
+
+            // Check if selected answer is correct or not
+            if (selectedAnswer === correctAnswer) {
+                $(this).addClass("correct"); // Highlight correct answer
+                score += 10; // Increase score for correct answer
+                const sound = new Audio(correctSound);
+                sound.volume = audioVolume;
+                sound.play(); // Correct answer sound
+
+                // Increment the question count and move to the next question
+                questionCount++;
+                setTimeout(generateAnimalQuestion, 1000); // Wait 1 second before generating the next question
+            } else {
+                $(this).addClass("wrong"); // Highlight wrong answer
+                score -= 5; // Deduct score for wrong answer
+                const sound = new Audio(wrongSound);
+                sound.volume = audioVolume;
+                sound.play(); // Wrong answer sound
+
+                // Update the score
+                $("#score").text(score);
+
+                // Don't move to the next question, allow the user to try again
+            }
+        });
+
     }
 
     $("#languageSelector").on("change", updateLanguage);

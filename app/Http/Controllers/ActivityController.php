@@ -29,7 +29,8 @@ class ActivityController extends Controller
     public function start()
     {
         $students = Student::all(); // Fetch all students
-        return view('activity.start', compact('students')); // Pass students to the view
+        $locale = session('app_locale', 'en'); // default to English
+        return view('activity.start', compact('students', 'locale'));
     }
 
 
