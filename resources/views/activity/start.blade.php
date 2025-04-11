@@ -34,7 +34,7 @@
 
         .game-content {
             flex-grow: 1;
-            min-height: 90vh;
+            min-height: 80vh;
             max-width: 700px;
             display: flex;
             flex-direction: column;
@@ -202,11 +202,44 @@
             font-size: 16px;
             border: 1px solid #ddd;
         }
+        .audio-controls {
+            display: flex;
+            flex-direction: row;
+            gap: 15px; /* Space between buttons */
+            margin-top: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .audio-controls .sound-btn {
+            width: 250px;
+            background: #3498db;
+            border: none;
+            color: black;
+            padding: 10px 16px;
+            font-size: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
 
     </style>
 
     <div class="game-container">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <!-- Hidden Input for Educator ID -->
+        <input type="hidden" id="educator_id" value="{{ Auth::id() }}">
         <div class="sidebar">
+            <div style="width: 100%; margin-bottom: 20px;">
+                <label for="studentSelect"><strong>Select Student:</strong></label>
+                <select id="studentSelect" class="form-control select2" style="width: 100%;">
+                    <option value="">-- Select Student --</option>
+                    @foreach($students as $student)
+                        <option value="{{ $student->id }}">{{ $student->full_name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             <h2 class="title">🐾 Animal Image Recognition 🐾</h2>
 
             <!-- Game Info -->
@@ -221,14 +254,19 @@
                 <button id="restartBtn" class="sound-btn restart-btn" disabled>🔄 Restart</button>
                 <button id="submitBtn" class="sound-btn submit-btn" disabled>✅ Submit</button>
             </div>
-            <!-- Audio Section -->
-            <div style="border-top: 1px solid #ccc; padding-top: 20px; width: 100%;">
-                <h5 style="margin-bottom: 10px;">🔊 Audio</h5>
-                <button id="playSoundBtn" class="sound-btn" style="width: 100%;">Play Animal Sound</button>
-            </div>
+
         </div>
 
         <div class="game-content">
+            <!-- Audio Section -->
+            <div id="audioSection" style="display: none; padding-top: 20px;">
+                <div class="audio-controls">
+                    <button id="playSoundBtn" class="sound-btn">Play Animal Sound</button>
+                    <!-- voiceControlBtn is inserted dynamically here -->
+                </div>
+            </div>
+
+
             <div class="image-container">
                 <img id="animalImage" src="" class="animal-image" alt="Animal Image" hidden>
             </div>
@@ -238,7 +276,7 @@
     </div>
 
     <!-- Settings Button -->
-    <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
+    <button class="settings-btn" onclick="toggleSettings()">⚙️ Setting </button>
 
     <!-- Settings Modal -->
     <div id="settingsModal" class="settings-modal">
@@ -301,7 +339,17 @@
 
     {{-- Step 2: Now load the game.js file --}}
     <script src="{{ asset('js/game.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#studentSelect').select2({
+                placeholder: "-- Select Student --"
+            });
+        });
+    </script>
 
+    <script>
+        const storeProgressUrl = "{{ route('activity.store-progress') }}";
+    </script>
     <script>
         var audioVolume = 1; // Declare globally
 

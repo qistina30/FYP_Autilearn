@@ -41,6 +41,7 @@
                                     <label for="ic_number" class="form-label"><i class="fas fa-id-card"></i> MyKid/IC Number</label>
                                     <input type="text" class="form-control" id="ic_number" name="ic_number" required placeholder="Enter MyKid/IC number">
                                 </div>
+
                             </div>
 
 
@@ -84,3 +85,30 @@
         </div>
     </div>
 @endsection
+
+    @section('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const icInput = document.getElementById('ic_number');
+
+                icInput.addEventListener('input', function (e) {
+                    // Remove all non-digit characters
+                    let value = e.target.value.replace(/\D/g, '');
+
+                    // Limit to 12 digits max
+                    value = value.substring(0, 12);
+
+                    // Apply the format: XXXXXX-XX-XXXX
+                    let formatted = value;
+                    if (value.length > 6 && value.length <= 8) {
+                        formatted = value.substring(0, 6) + '-' + value.substring(6);
+                    } else if (value.length > 8) {
+                        formatted = value.substring(0, 6) + '-' + value.substring(6, 8) + '-' + value.substring(8);
+                    }
+
+                    e.target.value = formatted;
+                });
+            });
+        </script>
+    @endsection
+

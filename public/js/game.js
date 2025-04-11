@@ -9,7 +9,11 @@ console.log("animalData:", window.animalData);
 
 $(document).ready(function () {
     console.log("animalData inside ready():", animalData);
-
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
     let timer = 0, score = 0, isRunning = false;
     let interval, questionCount = 0;
     const totalRounds = 5;
@@ -17,7 +21,7 @@ $(document).ready(function () {
 
     let availableAnimals = [...animalData];
 
-    function generateAnimalQuestion() {
+        function generateAnimalQuestion() {
         if (availableAnimals.length === 0) {
             return;
         }
@@ -30,7 +34,7 @@ $(document).ready(function () {
 
     // Remove the duplicate voice control button creation
     if (!$("#voiceControlBtn").length) {  // Check if the button already exists
-        $("<button id='voiceControlBtn' class='sound-btn' style='width: 100%; margin-top: 10px;'>🎙️ Voice Command</button>")
+        $("<button id='voiceControlBtn' class='sound-btn' '>🎙️ Voice Command</button>")
             .insertAfter("#playSoundBtn")
             .on("click", function () {
                 startListening();
@@ -87,6 +91,13 @@ $(document).ready(function () {
 
     // Game Start, Stop, and Submit functions
     function startGame() {
+        let studentId = $("#studentSelect").val();
+
+        if (!studentId) {
+            alert("Please select a student before starting the game.");
+            return; // prevent starting the game
+        }
+
         isRunning = true;
         timer = 0;
         score = 0;
@@ -105,7 +116,9 @@ $(document).ready(function () {
         }, 1000);
 
         generateAnimalQuestion();
+        $("#audioSection").show();
     }
+
 
     function stopGame() {
         isRunning = false;
@@ -113,9 +126,6 @@ $(document).ready(function () {
         $("#startBtn").prop("disabled", false);
     }
 
-    function submitGame() {
-        alert("Game progress saved! Final Score: " + score);
-    }
 
     let lang = localStorage.getItem("language") || "en";
 
@@ -237,15 +247,16 @@ $(document).ready(function () {
 
             // Check if selected answer is correct or not
             if (selectedAnswer === correctAnswer) {
-                $(this).addClass("correct"); // Highlight correct answer
-                score += 10; // Increase score for correct answer
+                $(this).addClass("correct");
+                score += 10;
+                $("#score").text(score); // ← Force update score in the DOM
+
                 const sound = new Audio(correctSound);
                 sound.volume = audioVolume;
-                sound.play(); // Correct answer sound
+                sound.play();
 
-                // Increment the question count and move to the next question
                 questionCount++;
-                setTimeout(generateAnimalQuestion, 1000); // Wait 1 second before generating the next question
+                setTimeout(generateAnimalQuestion, 1000);
             } else {
                 $(this).addClass("wrong"); // Highlight wrong answer
                 score -= 5; // Deduct score for wrong answer
@@ -262,6 +273,33 @@ $(document).ready(function () {
 
     }
 
+    function submitGame() {
+        let studentId = $("#studentSelect").val();
+        let timeTaken = $("#timer").text();
+        let educatorId = $("#educator_id").val();
+        let activityId = 4;
+
+        $.ajax({
+            url: storeProgressUrl,
+            method: "POST",
+            data: {
+                student_id: studentId,
+                educator_id: educatorId,
+                activity_id: activityId,
+                score: score,
+                time_taken: timeTaken,
+            },
+            success: function(response) {
+                alert("Game progress saved! Final Score: " + score);
+            },
+            error: function(xhr) {
+                console.log(xhr.responseText);
+                alert("Error updating progress.");
+            }
+        });
+
+        $("#submitBtn").prop("disabled", true);
+    }
     $("#languageSelector").on("change", updateLanguage);
     updateLanguage();
 

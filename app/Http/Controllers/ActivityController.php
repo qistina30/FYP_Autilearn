@@ -14,18 +14,7 @@ class ActivityController extends Controller
     {
         return view('activity.welcome');
     }
-    public function math()
-    {
-        $students = Student::all(); // Assuming you have a Student model
 
-        return view('activity.math', compact('students'));
-    }
-    public function spellingBee()
-    {
-        $students = Student::all(); // Assuming you have a Student model
-
-        return view('activity.spellingBee', compact('students'));
-    }
     public function start()
     {
         $students = Student::all(); // Fetch all students
@@ -33,17 +22,6 @@ class ActivityController extends Controller
         return view('activity.start', compact('students', 'locale'));
     }
 
-
-    public function intermediate()
-    {
-        $students = Student::all(); // Fetch all students
-        return view('activity.intermediate', compact('students')); // Pass students to the view
-    }
-    // Show the level selection page
-    public function chooseLevel()
-    {
-        return view('activity.chooseLevel');
-    }
 
     // Store student progress
     public function storeProgress(Request $request)
