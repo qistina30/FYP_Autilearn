@@ -20,9 +20,24 @@ class StudentController extends Controller
     // Show educator dashboard if the user is an educator
     public function index()
     {
-        $students = Student::all(); // Fetch all students
+        $students = Student::orderBy('full_name', 'asc')->paginate(10);
         return view('student.index', compact('students'));
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('query');
+
+        $students = Student::where('full_name', 'LIKE', "%{$query}%")
+            ->orWhere('ic_number', 'LIKE', "%{$query}%")
+            ->orWhere('guardian_name', 'LIKE', "%{$query}%")
+            ->orWhere('email', 'LIKE', "%{$query}%")
+            ->orderBy('full_name', 'asc')
+            ->get();
+
+        return view('student.partials.table', compact('students'))->render();
+    }
+
 
 
     // Show add student form
@@ -119,6 +134,14 @@ class StudentController extends Controller
         return view('student.dashboard');
     }
 
+    public function show($id)
+    {
+        // Retrieve the student by the ID
+        $student = Student::findOrFail($id);
+
+        // Return the 'show' view with the student data
+        return view('student.show', compact('student'));
+    }
     public function destroy($id)
     {
         $student = Student::findOrFail($id);
@@ -135,5 +158,43 @@ class StudentController extends Controller
 
         return redirect()->route('student.index')->with('success', 'Student and parent account deleted successfully.');
     }
+
+    public function edit($id)
+    {
+        $student = Student::findOrFail($id);
+        return view('student.edit', compact('student'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'full_name' => 'required|string|max:255',
+            'ic_number' => 'required|string|max:20',
+            'guardian_name' => 'required|string|max:255',
+            'contact_number' => 'required|string|max:20',
+            'email' => 'nullable|email|max:255',
+        ]);
+
+        $student = Student::findOrFail($id);
+        $student->full_name = $request->input('full_name');
+        $student->ic_number = $request->input('ic_number');
+        $student->guardian_name = $request->input('guardian_name');
+        $student->contact_number = $request->input('contact_number');
+        $student->email = $request->input('email');
+        $student->save();
+
+        // Assuming there's a relationship to the user, like: $student->user
+        // Or if guardian is a user, find it manually
+        $user = User::where('email', $student->email)->first(); // or however you relate it
+        if ($user) {
+            $user->name = $request->input('guardian_name');
+            $user->email = $request->input('email');
+            $user->save();
+        }
+
+        return redirect()->route('student.index')->with('success', 'Student information updated successfully.');
+    }
+
+
 
 }

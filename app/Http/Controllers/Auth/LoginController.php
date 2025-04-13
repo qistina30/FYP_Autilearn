@@ -27,12 +27,10 @@ class LoginController extends Controller
     protected function redirectTo()
     {
         if (Auth::user()->role === 'educator') {
-            return '/educator/dashboard';
-        } elseif (Auth::user()->role === 'parent') {
-            return '/parent/dashboard';
+            return '/activity/welcome';
+        } elseif (Auth::user()->role === 'guardian' || Auth::user()->role === 'admin') {
+            return '/dashboard';
         }
-
-        return '/home'; // Default fallback
     }
 
     /**

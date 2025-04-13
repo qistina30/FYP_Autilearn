@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EducatorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LearningModuleController;
@@ -31,22 +32,26 @@ Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 
-    // Educator Dashboard
-    Route::get('/educator/dashboard', function () {
-        return view('educator.dashboard'); // View for educator dashboard
-    })->name('educator.dashboard');
 
     // Add New Student Page
     Route::get('/educator/add-student', [StudentController::class, 'create'])->name('educator.add-student');
     Route::post('/educator/store-student', [StudentController::class, 'store'])->name('educator.store-student');
+Route::get('/educator/{educator}/edit', [EducatorController::class, 'edit'])->name('educator.edit');
+Route::delete('/educator/{id}', [EducatorController::class, 'destroy'])->name('educator.destroy');
+Route::put('/educator/{id}', [EducatorController::class, 'update'])->name('educator.update');
+
+
 
 // Student Dashboard
 Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
 Route::get('/student', [StudentController::class, 'index'])->name('student.index');
-//Route::get('/{student}/edit', [StudentController::class, 'edit'])->name('student.edit'); // Edit student form
-//Route::put('/{student}', [StudentController::class, 'update'])->name('student.update'); // Update student
+Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('student.edit');
+Route::put('/students/{id}', [StudentController::class, 'update'])->name('student.update');
 Route::delete('/{student}', [StudentController::class, 'destroy'])->name('student.destroy'); // Delete student
+Route::get('/students/search', [StudentController::class, 'search'])->name('student.search');
+Route::get('/student/{id}', [StudentController::class, 'show'])->name('student.show');
 
 Route::post('/activity/store-progress', [ActivityController::class, 'storeProgress'])->name('activity.store-progress');
 Route::get('/activity/start', [ActivityController::class, 'start'])->name('activity.start');
@@ -58,7 +63,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 });
 
-Route::get('/activity/video', [ActivityController::class, 'video'])->name('activity.video');
+
 Route::get('/activity/welcome', [ActivityController::class, 'welcome'])->name('activity.welcome');
 
 Route::get('/lang/{locale}', function (\Illuminate\Http\Request $request, $locale) {
@@ -73,4 +78,5 @@ Route::get('/lang/{locale}', function (\Illuminate\Http\Request $request, $local
 })->name('set.language');
 
 Route::get('/report/overall-performance', [ReportController::class, 'overallPerformance'])->name('report.analytics');
-//Route::get('/report/{id}', [ReportController::class, 'show'])->name('report.show');
+Route::get('/report/{id}', [ReportController::class, 'show'])->name('report.show');
+Route::put('/educator-notes/{id}', [ReportController::class, 'storeNotes'])->name('educator.notes.store');

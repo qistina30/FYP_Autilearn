@@ -20,6 +20,7 @@ class ReportController extends Controller
         // Best score per student with student name
         $bestScoresFull = $progress->groupBy('student_id')->map(function ($group) {
             return [
+                'student_id' => $group->first()->student_id,
                 'student_name' => $group->first()->student->full_name ?? 'N/A',
                 'best_score' => $group->max('score'),
             ];
@@ -53,15 +54,36 @@ class ReportController extends Controller
 
     public function show($id)
     {
-        $student = Student::findOrFail($id); // assuming there's a Student model
-        $progress = StudentProgress::where('student_id', $id)
-            ->join('students', 'student_progress.student_id', '=', 'students.id')  // Join with students table
-            ->orderBy('activity_id')
-            ->orderBy('attempt_number')
-            ->select('student_progress.*', 'students.name as student_name') // Select student name along with other fields
-            ->get();
+        $student = Student::findOrFail($id);
 
-        return view('report.show', compact('student', 'progress'));
+        $progress = StudentProgress::where('student_id', $id)->orderBy('created_at', 'desc')->get();;
+        $averageScore = $progress->avg('score');
+        $averageTime = $progress->avg('time_taken');
+        $attempts = $progress->max('attempt_number');
+        $last7DaysAttempts = $progress->where('created_at', '>=', now()->subDays(7))->count();
+
+
+        return view('report.show', [
+            'student' => $student,
+            'progress' => $progress,
+            'averageScore' => $averageScore,
+            'averageTime' => $averageTime,
+            'attempts' => $attempts,
+            'last7DaysAttempts' =>  $last7DaysAttempts,
+        ]);
+    }
+
+    public function storeNotes(Request $request, $id)
+    {
+        $request->validate([
+            'educator_notes' => 'nullable|string|max:1000',
+        ]);
+
+        $progress = StudentProgress::findOrFail($id);
+        $progress->educator_notes = $request->educator_notes;
+        $progress->save();
+
+        return redirect()->back()->with('success', 'Notes updated successfully!');
     }
 
 

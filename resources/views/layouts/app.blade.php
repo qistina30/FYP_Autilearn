@@ -95,16 +95,10 @@
                     @endif
                 @else
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('educator.dashboard') }}">Dashboard</a>
+                        <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Student
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('student.index') }}">View Student List</a>
-                            <a class="dropdown-item" href="{{ route('educator.add-student') }}">Add Student</a>
-                        </div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('student.index') }}">View Student</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('activity.welcome') }}">Let's Learn</a>

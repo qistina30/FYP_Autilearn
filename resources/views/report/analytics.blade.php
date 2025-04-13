@@ -38,13 +38,14 @@
                 <h5 class="mb-0 fw-bold text-secondary">🏆 Best Score Per Student</h5>
                 <button class="btn btn-outline-primary btn-sm" id="toggleScoresBtn">Show All</button>
             </div>
-            <div class="table-responsive">
-                <table class="table table-hover table-striped align-middle" id="bestScoresTable">
-                    <thead class="table-light">
+            <div class="table-responsive rounded-4 overflow-hidden">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-primary text-white">
                     <tr>
                         <th scope="col">Rank</th>
                         <th scope="col">Student Name</th>
                         <th scope="col">Best Score</th>
+                        <th scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody id="bestScoresBody">
@@ -66,27 +67,42 @@
                                 @endif
                             </td>
                             <td class="fw-medium">{{ $item['student_name'] }}</td>
-                            <td><span class=" fs-6">{{ $item['best_score'] }}</span></td>
+                            <td><span class="badge bg-success fs-6">{{ $item['best_score'] }}</span></td>
+                            <td>
+                                <a href="{{ route('report.show', ['id' => $item['student_id']]) }}" class="btn btn-sm btn-outline-primary">
+                                    View Report
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
+
     </div>
 @endsection
-
+@php
+    $reportUrlBase = url('/report/show');
+@endphp
 @section('scripts')
-    <script>
-        const top5 = `{!! $bestScoresTop5->map(function($item, $index) {
-            $rank = $index === 0 ? '🥇' : ($index === 1 ? '🥈' : ($index === 2 ? '🥉' : '<span class="badge bg-secondary">' . ($index+1) . '</span>'));
-            $rowClass = $index === 0 ? 'table-warning' : ($index === 1 ? 'table-light' : ($index === 2 ? 'table-info' : ''));
-            return '<tr class="' . $rowClass . '"><td>' . $rank . '</td><td class="fw-medium">' . $item['student_name'] . '</td><td><span class="badge bg-success fs-6">' . $item['best_score'] . '</span></td></tr>';
-        })->implode('') !!}`;
 
-        const fullList = `{!! $bestScoresFull->map(function($item, $index) {
-            return '<tr><td><span class="badge bg-secondary">' . ($index + 1) . '</span></td><td class="fw-medium">' . $item['student_name'] . '</td><td><span class="badge bg-success fs-6">' . $item['best_score'] . '</span></td></tr>';
-        })->implode('') !!}`;
+    <script>
+        const reportUrlBase = "{{ $reportUrlBase }}/";
+
+        const top5 = `{!! $bestScoresTop5->map(function($item, $index) use($reportUrlBase) {
+    $rank = $index === 0 ? '🥇' : ($index === 1 ? '🥈' : ($index === 2 ? '🥉' : '<span class="badge bg-secondary">' . ($index+1) . '</span>'));
+    $rowClass = $index === 0 ? 'table-warning' : ($index === 1 ? 'table-light' : ($index === 2 ? 'table-info' : ''));
+    $action = '<a href="' . $reportUrlBase . $item['student_id'] . '" class="btn btn-sm btn-outline-info">View Report</a>';
+    return '<tr class="' . $rowClass . '"><td>' . $rank . '</td><td class="fw-medium">' . $item['student_name'] . '</td><td><span class="badge bg-success fs-6">' . $item['best_score'] . '</span></td><td>' . $action . '</td></tr>';
+})->implode('') !!}`;
+
+
+        const fullList = `{!! $bestScoresFull->map(function($item, $index) use($reportUrlBase) {
+    $action = '<a href="' . $reportUrlBase . $item['student_id'] . '" class="btn btn-sm btn-outline-info">View Report</a>';
+    return '<tr><td><span class="badge bg-secondary">' . ($index + 1) . '</span></td><td class="fw-medium">' . $item['student_name'] . '</td><td><span class="badge bg-success fs-6">' . $item['best_score'] . '</span></td><td>' . $action . '</td></tr>';
+})->implode('') !!}`;
+
 
         document.getElementById('toggleScoresBtn').addEventListener('click', function () {
             const tbody = document.getElementById('bestScoresBody');

@@ -76,8 +76,6 @@
                                     <i class="fas fa-redo"></i> Reset
                                 </button>
                             </div>
-
-
                         </form>
                     </div>
                 </div>

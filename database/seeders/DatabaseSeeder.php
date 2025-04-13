@@ -45,6 +45,9 @@ class DatabaseSeeder extends Seeder
         foreach ($educators as $educator) {
             User::create($educator);
         }
+        $this->call([
+            EducatorSeeder::class,
+        ]);
     }
 
 }
