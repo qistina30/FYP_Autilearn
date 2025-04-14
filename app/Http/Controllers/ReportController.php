@@ -10,7 +10,7 @@ class ReportController extends Controller
 {
     public function overallPerformance()
     {
-        // Get all student progress data (you can filter by status if needed)
+        // Get all student progress data
         $progress = StudentProgress::all();
         $totalAttempts = $progress->count();
 
@@ -28,7 +28,6 @@ class ReportController extends Controller
 
         $bestScoresTop5 = $bestScoresFull->take(5);
 
-
         // Average time taken
         $averageTime = round($progress->avg('time_taken'), 2);
 
@@ -39,7 +38,26 @@ class ReportController extends Controller
         $uniqueStudents = $progress->groupBy('student_id')->count(); // Count unique students
         $averageAttemptsPerStudent = $totalAttempts / $uniqueStudents;
 
-        // Pass all the data to the view
+        // ✅ Most Active Student
+        $mostActiveStudentData = $progress->groupBy('student_id')
+            ->map(function ($group) {
+                return [
+                    'student_id' => $group->first()->student_id,
+                    'student_name' => $group->first()->student->full_name ?? 'N/A',
+                    'attempts' => $group->count()
+                ];
+            })->sortByDesc('attempts')->first();
+
+        $mostActiveStudentName = $mostActiveStudentData['student_name'] ?? 'N/A';
+        $mostActiveStudentAttempts = $mostActiveStudentData['attempts'] ?? 0;
+
+        // ✅ Fastest Time Taken (excluding empty or null)
+        $fastestTime = $progress->where('time_taken', '>', 0)->sortBy('time_taken')->first();
+
+        // ✅ Overall average score (can reuse averageScore or keep separately if needed)
+        $overallAverageScore = $averageScore;
+
+        // Pass all data to the view
         return view('report.analytics', [
             'averageScore' => $averageScore,
             'bestScoresTop5' => $bestScoresTop5,
@@ -48,9 +66,15 @@ class ReportController extends Controller
             'completedCount' => $completedCount,
             'totalAttempts' => $totalAttempts,
             'averageAttemptsPerStudent' => $averageAttemptsPerStudent,
-        ]);
 
+            // New values
+            'mostActiveStudentName' => $mostActiveStudentName,
+            'mostActiveStudentAttempts' => $mostActiveStudentAttempts,
+            'overallAverageScore' => $overallAverageScore,
+            'fastestTime' => $fastestTime,
+        ]);
     }
+
 
     public function show($id)
     {

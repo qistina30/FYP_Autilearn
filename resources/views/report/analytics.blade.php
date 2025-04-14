@@ -6,32 +6,50 @@
             📊 Overall Student Analytics
         </h2>
 
-        <div class="row g-4">
-            <div class="col-md-4">
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
                 <div class="card shadow-sm border-0 h-100">
-                    <div class="card-body">
-                        <h6 class="text-muted">Average Score</h6>
-                        <h4 class="text-success fw-bold">{{ number_format($averageScore, 2) }}</h4>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card shadow-sm border-0 h-100">
-                    <div class="card-body">
+                    <div class="card-body text-center">
+                        <i class="bi bi-clock-history fs-3 text-warning mb-2"></i>
                         <h6 class="text-muted">Average Time Taken</h6>
-                        <h4 class="text-warning fw-bold">{{ number_format($averageTime, 2) }} <small class="text-muted">seconds</small></h4>
+                        <h3 class="fw-bold text-warning">{{ number_format($averageTime, 2) }}</h3>
+                        <small class="text-muted">seconds</small>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+
+            <div class="col-md-3">
                 <div class="card shadow-sm border-0 h-100">
-                    <div class="card-body">
-                        <h6 class="text-muted">Average Attempts Per Student</h6>
-                        <h4 class="text-info fw-bold">{{ number_format($averageAttemptsPerStudent, 2) }}</h4>
+                    <div class="card-body text-center">
+                        <i class="bi bi-arrow-repeat fs-3 text-info mb-2"></i>
+                        <h6 class="text-muted">Attempts / Student</h6>
+                        <h3 class="fw-bold text-info">{{ number_format($averageAttemptsPerStudent, 2) }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-bar-chart-fill fs-3 text-primary mb-2"></i>
+                        <h6 class="text-muted">Avg. Score</h6>
+                        <h3 class="fw-bold text-primary">{{ $overallAverageScore }}%</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-lightning-fill fs-3 text-danger mb-2"></i>
+                        <h6 class="text-muted">Fastest Time</h6>
+                        <h3 class="fw-bold text-danger">{{ $fastestTime->time_taken ?? 'N/A' }}</h3>
+                        <small class="text-muted">seconds</small>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <div class="card p-4 mt-5 shadow-sm">
             <div class="d-flex justify-content-between align-items-center mb-3">

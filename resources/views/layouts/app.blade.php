@@ -4,6 +4,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=OpenDyslexic:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -98,10 +101,10 @@
                         <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('student.index') }}">View Student</a>
+                        <a class="nav-link" href="{{ route('activity.welcome') }}">Activity</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('activity.welcome') }}">Let's Learn</a>
+                        <a class="nav-link" href="{{ route('student.index') }}">View Student</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('educator.index') }}">View Educator</a>

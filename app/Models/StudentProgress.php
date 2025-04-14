@@ -10,7 +10,7 @@ class StudentProgress extends Model
     use HasFactory;
 
     protected $fillable = [
-        'student_id', 'educator_id', 'score', 'time_taken', 'status','activity_id','attempt_number'
+        'student_id', 'educator_id', 'score', 'time_taken','activity_id','attempt_number'
     ];
 
     public function student()

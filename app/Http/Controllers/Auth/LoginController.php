@@ -26,7 +26,7 @@ class LoginController extends Controller
      */
     protected function redirectTo()
     {
-        if (Auth::user()->role === 'educator') {
+        if (Auth::user()->role === 'admin') {
             return '/activity/welcome';
         } elseif (Auth::user()->role === 'guardian' || Auth::user()->role === 'admin') {
             return '/dashboard';
