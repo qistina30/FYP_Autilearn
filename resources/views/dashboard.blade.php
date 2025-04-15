@@ -92,9 +92,201 @@ height: 300px !important;
 
         @endif
     </div>
+
+    @if($role === 'guardian')
+        <div class="container py-4">
+            <div class="mb-4 text-center">
+                <h2 class="fw-bold text-primary"><i class="bi bi-house-heart-fill me-2"></i>Guardian Dashboard</h2>
+                <p class="text-muted fs-6">Welcome! Here's an overview of your child's recent learning activity.</p>
+            </div>
+
+            @forelse($childrenData as $child)
+                <div class="card shadow-sm mb-4 border-0 rounded-4">
+                    <div class="card-body">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
+                            <div>
+                                <h4 class="fw-bold text-primary mb-1 ">
+                                    <i class="bi bi-person-circle me-2 "></i>{{ $child['full_name'] }}
+                                </h4>
+                                @php
+                                    $trendColor = match($child['trend']) {
+                                        'Improving' => 'success',
+                                        'Consistent' => 'warning',
+                                        'Declining' => 'danger',
+                                        default => 'secondary'
+                                    };
+                                @endphp
+                                <span class="badge bg-{{ $trendColor }} px-3 py-2 fs-6">
+                    <i class="bi bi-bar-chart-line-fill me-1"></i>
+                    Performance: {{ $child['trend'] }}
+                </span>
+                            </div>
+
+                            <div class="mt-3 mt-md-0">
+                                <a href="{{ route('report.show', ['id' => $child['id']]) }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-file-earmark-text me-1"></i> View Detailed Report
+                                </a>
+                            </div>
+                        </div>
+
+                        <hr class="mb-4">
+
+                        <div class="row text-center text-md-start mb-3">
+                            <div class="col-md-3 col-6 mb-3">
+                                <div class="small text-muted">Latest Score</div>
+                                <div class="fw-semibold">
+                                    {{ $child['score'] !== null ? $child['score'] . ' / 40 (' . $child['percentage'] . '%)' : 'Not Attempted Yet' }}
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6 mb-3">
+                                <div class="small text-muted">Time Spent</div>
+                                <div class="fw-semibold">{{ $child['time_taken'] ?? '-' }} seconds</div>
+                            </div>
+                            <div class="col-md-3 col-6 mb-3">
+                                <div class="small text-muted">Assisted By</div>
+                                <div class="fw-semibold">
+                                    <div class="fw-semibold">{{ $child['assisted_by'] }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6 mb-3">
+                                <div class="small text-muted">Last Attempt</div>
+                                <div class="fw-semibold">{{ $child['last_attempt'] }}</div>
+                            </div>
+
+
+                        </div>
+
+                    @if(count($child['recent_scores']) > 0)
+                            <div class="mt-3">
+                                <canvas id="scoreChart{{ $loop->index }}" style="height: 280px;"></canvas>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+            @empty
+                <div class="alert alert-info text-center">
+                    <i class="bi bi-info-circle me-2"></i>No student records found under your profile.
+                </div>
+            @endforelse
+        </div>
+    @endif
+
+    <script>
+        @foreach($childrenData as $index => $child)
+        @if(count($child['recent_scores']) > 0)
+        const ctx{{ $index }} = document.getElementById('scoreChart{{ $index }}').getContext('2d');
+        const gradient{{ $index }} = ctx{{ $index }}.createLinearGradient(0, 0, 0, 150);
+        gradient{{ $index }}.addColorStop(0, 'rgba(0, 123, 255, 0.4)');
+        gradient{{ $index }}.addColorStop(1, 'rgba(0, 123, 255, 0.05)');
+
+        new Chart(ctx{{ $index }}, {
+            type: 'line',
+            data: {
+                labels: [...Array({{ count($child['recent_scores']) }}).keys()].map(i => 'Attempt ' + (i + 1)),
+                datasets: [{
+                    label: 'Score (out of 40)',
+                    data: {!! json_encode($child['recent_scores']) !!},
+                    fill: true,
+                    backgroundColor: gradient{{ $index }},
+                    borderColor: '#0d6efd',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#0d6efd',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                    duration: 1200,
+                    easing: 'easeOutBounce'
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            boxWidth: 12,
+                            color: '#333',
+                            font: { size: 12, weight: 'bold' }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#f8f9fa',
+                        titleColor: '#212529',
+                        bodyColor: '#212529',
+                        borderColor: '#dee2e6',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: context => ` Score: ${context.raw} / 40`
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Recent Score Trend',
+                        color: '#0d6efd',
+                        font: {
+                            size: 18,
+                            weight: 'bold'
+                        },
+                        padding: {
+                            top: 10,
+                            bottom: 20
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 40,
+                        ticks: {
+                            stepSize: 5
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)',
+                            borderDash: [4, 4]
+                        },
+                        title: {
+                            display: true,
+                            text: 'Score',
+                            color: '#6c757d',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Attempts',
+                            color: '#6c757d',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        @endif
+        @endforeach
+    </script>
+
+
 @endsection
 
 @section('scripts')
+    @if($role === 'admin')
     {{-- Pie Chart: Attempt Status --}}
     <script>
         const ctx2 = document.getElementById('statusPieChart').getContext('2d');
@@ -214,6 +406,7 @@ height: 300px !important;
             }
         });
     </script>
+    @endif
 @endsection
 
 

@@ -25,5 +25,10 @@ class Student extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function progress()
+    {
+        return $this->hasMany(\App\Models\StudentProgress::class, 'student_id');
+    }
+
 
 }
