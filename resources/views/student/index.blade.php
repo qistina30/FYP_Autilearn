@@ -30,7 +30,7 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="fw-bold text-secondary mb-0">🎓 Student List</h5>
                 <a href="{{ route('educator.add-student') }}" class="btn btn-success btn-sm">
-                    <i class="fas fa-user-plus"></i>Add Student
+                    <i class="fas fa-user-plus"></i> Add Student
                 </a>
             </div>
 

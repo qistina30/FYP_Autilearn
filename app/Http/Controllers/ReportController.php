@@ -80,12 +80,19 @@ class ReportController extends Controller
     {
         $student = Student::findOrFail($id);
 
-        $progress = StudentProgress::where('student_id', $id)->orderBy('created_at', 'desc')->get();;
+        // Guardian can only access their own child's report
+        if (auth()->user()->role === 'guardian' && $student->guardian_name !== auth()->user()->name) {
+            abort(403, 'Unauthorized access to this report.');
+        }
+
+        $progress = StudentProgress::where('student_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         $averageScore = $progress->avg('score');
         $averageTime = $progress->avg('time_taken');
         $attempts = $progress->max('attempt_number');
         $last7DaysAttempts = $progress->where('created_at', '>=', now()->subDays(7))->count();
-
 
         return view('report.show', [
             'student' => $student,
@@ -93,9 +100,10 @@ class ReportController extends Controller
             'averageScore' => $averageScore,
             'averageTime' => $averageTime,
             'attempts' => $attempts,
-            'last7DaysAttempts' =>  $last7DaysAttempts,
+            'last7DaysAttempts' => $last7DaysAttempts,
         ]);
     }
+
 
     public function storeNotes(Request $request, $id)
     {

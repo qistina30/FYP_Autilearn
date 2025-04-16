@@ -128,7 +128,7 @@
     <div class="welcome-container">
         <h1 class="title" id="welcomeTitle">Welcome to the Animal Recognition Activity 🐾</h1>
         <p class="description" id="welcomeDescription">
-            This activity is designed for children with autism to help them recognize animals through interactive games and sounds.
+            This activity is designed for children with autism to help them recognize animals through interactive pictures and sounds.
         </p>
 
         <div class="settings-container">
@@ -198,12 +198,12 @@
         function applyLanguage(language) {
             if (language === 'ms') {
                 document.getElementById('welcomeTitle').innerText = "Selamat Datang ke Aktiviti Pengenalan Haiwan 🐾";
-                document.getElementById('welcomeDescription').innerText = "Aktiviti ini direka khas untuk kanak-kanak autisme bagi membantu mereka mengenali haiwan melalui permainan interaktif dan bunyi.";
+                document.getElementById('welcomeDescription').innerText = "Aktiviti ini direka khas untuk kanak-kanak autisme bagi membantu mereka mengenali haiwan melalui gambar interaktif dan bunyi.";
                 document.getElementById('startActivity').innerText = "Mulakan Aktiviti 🎮";
                 document.getElementById('watchVideoBtn').innerText = "Tonton Video ▶️";
             } else {
                 document.getElementById('welcomeTitle').innerText = "Welcome to the Animal Recognition Activity 🐾";
-                document.getElementById('welcomeDescription').innerText = "This activity is designed for children with autism to help them recognize animals through interactive games and sounds.";
+                document.getElementById('welcomeDescription').innerText = "This activity is designed for children with autism to help them recognize animals through interactive pictures and sounds.";
                 document.getElementById('startActivity').innerText = "Start Activity 🎮";
                 document.getElementById('watchVideoBtn').innerText = "Watch Video ▶️";
             }

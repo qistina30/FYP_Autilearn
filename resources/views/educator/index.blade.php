@@ -25,7 +25,10 @@
                         <th>User ID</th>
                         <th>Name</th>
                         <th>Email</th>
-                        <th class="text-center">Actions</th>
+
+                        @if(auth()->user()->role === 'admin')
+                            <th class="text-center">Actions</th>
+                        @endif
                     </tr>
                     </thead>
                     <tbody id="educatorTable">
@@ -37,21 +40,28 @@
                             <td>{{ $educator->user_id }}</td>
                             <td>{{ $educator->name }}</td>
                             <td>{{ $educator->email }}</td>
-                            <td class="text-center">
-                                 <a href="{{ route('educator.edit', $educator->id) }}" class="btn btn-warning btn-sm me-1">✏️ Edit</a>
-                                 <form action="{{ route('educator.destroy', $educator->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this educator?');">🗑️ Delete</button>
-                                </form>
-                            </td>
+
+                            @if(auth()->user()->role === 'admin')
+                                <td class="text-center">
+                                    <a href="{{ route('educator.edit', $educator->id) }}" class="btn btn-warning btn-sm me-1">✏️ Edit</a>
+                                    <form action="{{ route('educator.destroy', $educator->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Are you sure you want to delete this educator?');">
+                                            🗑️ Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            @endif
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center text-muted">No educators found.</td>
+                            <td colspan="{{ auth()->user()->role === 'admin' ? 5 : 4 }}" class="text-center">No educators found.</td>
                         </tr>
                     @endforelse
                     </tbody>
+
                 </table>
 
                 <!-- Pagination -->

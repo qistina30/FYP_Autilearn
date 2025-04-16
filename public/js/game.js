@@ -131,7 +131,8 @@ $(document).ready(function () {
 
     const translations = {
         en: {
-            title: "🐾 Animal Image Recognition 🐾",
+
+            title: " Animal Image Recognition ",
             time: "⏳ Time:",
             score: "⭐ Score:",
             start: "🎮 Start",
@@ -156,7 +157,7 @@ $(document).ready(function () {
             }
         },
         ms: {
-            title: "🐾 Pengecaman Imej Haiwan 🐾",
+            title: " Pengecaman Imej Haiwan ",
             time: "⏳ Masa:",
             score: "⭐ Markah:",
             start: "🎮 Mula",

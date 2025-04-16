@@ -20,7 +20,7 @@
         .sidebar {
             text-align: center;
             width: 300px;
-            min-height: 80vh;
+            min-height: 85vh;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -34,7 +34,7 @@
 
         .game-content {
             flex-grow: 1;
-            min-height: 80vh;
+            min-height: 85vh;
             max-width: 700px;
             display: flex;
             flex-direction: column;
@@ -222,8 +222,36 @@
             cursor: pointer;
             transition: background 0.2s ease, transform 0.2s ease;
         }
+        .game-guide {
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
 
     </style>
+    <!-- 🎯 How to Play Guide -->
+    <div class="game-guide card p-3 mb-3 shadow-sm" style="background-color: #e8f4ff; border-left: 6px solid #007bff;">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-2 fw-bold text-primary">
+                🎯 How to Play
+            </h5>
+            <button class="btn btn-sm btn-outline-primary" onclick="toggleGuide()">
+                <i class="bi bi-eye-fill me-1"></i> Toggle Guide
+            </button>
+        </div>
+
+        <ol id="guideSteps" class="mt-3" style="padding-left: 20px; display: none; transition: all 0.3s ease;">
+            <li><strong>Select a student</strong> from the dropdown menu 🎓</li>
+            <li>Click <strong>“Start”</strong> to begin the game 🎮</li>
+            <li>Click <strong>“Play Animal Sound”</strong> to hear the sound 🔊</li>
+            <li><strong>Look at the images</strong> and select the correct animal 🐾</li>
+            <li>Or <strong>say the animal name</strong> using <strong>voice command</strong> 🎙️</li>
+            <li>Click <strong>“Submit”</strong> to finalize your answer ✅</li>
+            <li>Click <strong>“Restart”</strong> to try again 🔄</li>
+            <li>Track your <strong>time and score</strong> on the left panel ⏱️⭐</li>
+            <li>Use <strong>⚙️ Customize</strong> to adjust background, volume, or language</li>
+        </ol>
+    </div>
+
 
     <div class="game-container">
         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -231,7 +259,7 @@
         <input type="hidden" id="educator_id" value="{{ Auth::id() }}">
         <div class="sidebar">
             <div style="width: 100%; margin-bottom: 20px;">
-                <label for="studentSelect"><strong>Select Student:</strong></label>
+                <label for="studentSelect"><strong>🎓 Select Student</strong></label>
                 <select id="studentSelect" class="form-control select2" style="width: 100%;">
                     <option value="">-- Select Student --</option>
                     @foreach($students as $student)
@@ -240,7 +268,7 @@
                 </select>
             </div>
 
-            <h2 class="title">🐾 Animal Image Recognition 🐾</h2>
+            <h2 class="title"> Animal Image Recognition </h2>
 
             <!-- Game Info -->
             <div style="margin-bottom: 7px;">
@@ -259,7 +287,7 @@
 
         <div class="game-content">
             <!-- Audio Section -->
-            <div id="audioSection" style="display: none; padding-top: 20px;">
+            <div id="audioSection" style="display: none; padding-top: 10px; padding-bottom: 20px;">
                 <div class="audio-controls">
                     <button id="playSoundBtn" class="sound-btn">Play Animal Sound</button>
                     <!-- voiceControlBtn is inserted dynamically here -->
@@ -276,12 +304,12 @@
     </div>
 
     <!-- Settings Button -->
-    <button class="settings-btn" onclick="toggleSettings()">⚙️ Setting </button>
+    <button class="settings-btn" onclick="toggleSettings()">⚙️ Customize </button>
 
     <!-- Settings Modal -->
     <div id="settingsModal" class="settings-modal">
         <div class="modal-content">
-            <h3>Settings</h3>
+            <h3>Customize Settings</h3>
             <label id="volumeLabel" for="volumeControl">🔊 Volume:</label>
             <input type="range" id="volumeControl" min="0" max="1" step="0.01">
 
@@ -303,11 +331,28 @@
     </div>
 
 
+
 @endsection
 
 @section('scripts')
+
     {{-- Step 1: Declare animalData --}}
     <script>
+        function toggleGuide() {
+            const guide = document.getElementById('guideSteps');
+            if (guide.style.display === "none" || guide.style.display === "") {
+                guide.style.display = "block";
+            } else {
+                guide.style.display = "none";
+            }
+        }
+
+        // Hide guide by default on page load
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById('guideSteps').style.display = "none";
+        });
+
+
         const animalData = [
             {
                 name: "dog",

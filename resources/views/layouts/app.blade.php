@@ -4,6 +4,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=OpenDyslexic:wght@400;700&display=swap" rel="stylesheet">
+    <!-- In the <head> section of your layout file -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -97,21 +100,54 @@
                         </li>
                     @endif
                 @else
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('activity.welcome') }}">Activity</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('student.index') }}">View Student</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('educator.index') }}">View Educator</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('report.analytics') }}">View Report</a>
-                    </li>
+                    @auth
+                        @if(in_array(auth()->user()->role, ['admin', 'guardian']))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
+                            </li>
+                        @endif
+
+                        <!-- Activity (admin, educator only) -->
+                        @if(in_array(auth()->user()->role, ['admin', 'educator']))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('activity.welcome') }}">Activity</a>
+                            </li>
+                        @endif
+
+                        <!-- View Student (admin, educator only) -->
+                        @if(in_array(auth()->user()->role, ['admin', 'educator']))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('student.index') }}">View Student</a>
+                            </li>
+                        @endif
+
+                        <!-- View Educator (admin, educator only) -->
+                        @if(in_array(auth()->user()->role, ['admin', 'educator']))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('educator.index') }}">View Educator</a>
+                            </li>
+                        @endif
+
+                        <!-- View Report (admin, educator, guardian) -->
+                        @if(in_array(auth()->user()->role, ['admin', 'educator']))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('report.analytics') }}">View Report</a>
+                            </li>
+                            @elseif(auth()->user()->role === 'guardian' && auth()->user()->children->isNotEmpty())
+                                @php
+                                    $firstChild = auth()->user()->children->first();
+                                @endphp
+                                @if($firstChild)
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('report.show', ['id' => $firstChild->id]) }}">
+                                            My Child's Report
+                                        </a>
+                                    </li>
+                                @endif
+                            @endif
+
+                    @endauth
+
                     <li class="nav-item dropdown">
                         <a id="logoutDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->name }}

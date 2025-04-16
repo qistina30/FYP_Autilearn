@@ -173,6 +173,7 @@ height: 300px !important;
     @endif
 
     <script>
+        @if($role === 'guardian')
         @foreach($childrenData as $index => $child)
         @if(count($child['recent_scores']) > 0)
         const ctx{{ $index }} = document.getElementById('scoreChart{{ $index }}').getContext('2d');
@@ -280,9 +281,11 @@ height: 300px !important;
         });
         @endif
         @endforeach
+        @endif
     </script>
 
-
+    @if($role === 'educator')
+    @endif
 @endsection
 
 @section('scripts')

@@ -54,7 +54,10 @@
                         <th>Date</th>
                         <th>Assisted By</th>
                         <th>Feedback</th> {{-- new notes column --}}
-                        <th>Action</th>   {{-- button column --}}
+                        @if(in_array(auth()->user()->role, ['admin', 'educator']))
+                            <th>Actions</th>
+                        @endif
+
                     </tr>
                     </thead>
 
@@ -62,9 +65,9 @@
                         <tr>
                             <td class="text-center fw-bold">{{ $index + 1 }}</td>
                             <td>
-        <span class="badge bg-gradient bg-success fs-6 px-3 py-2 shadow-sm">
-            {{ $item->score }}
-        </span>
+                            <span class="badge bg-gradient bg-success fs-6 px-3 py-2 shadow-sm">
+                                {{ $item->score }}
+                            </span>
                             </td>
                             <td><span class="text-warning fw-semibold">{{ $item->time_taken }}</span></td>
                             <td class="text-muted">{{ $item->created_at->format('d M Y H:i') }}</td>
@@ -82,18 +85,19 @@
                             </td>
 
                             {{-- Action Button (only show if assisted by logged-in educator) --}}
-                            <td>
-                                @if(Auth::user()->user_id === $item->educator_id)
-                                    <button class="btn btn-sm btn-outline-primary"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#notesModal{{ $item->id }}">
-                                        📝 {{ $item->educator_notes ? 'Edit' : 'Add' }} Notes
-                                    </button>
-                                @else
-                                    <span class="text-muted small" title="You didn't assist this attempt.">—</span>
-                                @endif
-                            </td>
-
+                            @if(in_array(auth()->user()->role, ['admin', 'educator']))
+                                <td>
+                                    @if(Auth::user()->user_id === $item->educator_id || auth()->user()->role === 'admin')
+                                        <button class="btn btn-sm btn-outline-primary"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#notesModal{{ $item->id }}">
+                                            📝 {{ $item->educator_notes ? 'Edit' : 'Add' }} Notes
+                                        </button>
+                                    @else
+                                        <span class="text-muted small" title="You didn't assist this attempt.">—</span>
+                                    @endif
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
 
