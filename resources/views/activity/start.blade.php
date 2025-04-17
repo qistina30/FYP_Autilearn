@@ -153,55 +153,69 @@
             background-color: #0069d9; /* Darker Blue for hover */
         }
 
-        /* Settings Button Styles */
-        .settings-btn {
+        .toggle-icon-btn {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: #3498db;
-            border: none;
+            background-color: #007bff;
             color: white;
-            padding: 15px 25px;
-            font-size: 18px;
+            border: none;
             border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 20px;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1100;
+            transition: background-color 0.3s ease;
         }
 
-        .settings-btn:hover {
-            background: #2980b9;
+        .toggle-icon-btn:hover {
+            background-color: #0056b3;
         }
 
-        .settings-modal {
+        .settings-toggle {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            bottom: 75px;
+            right: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
             display: none;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1000;
+            width: 250px;
         }
 
-        .settings-modal .modal-content {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            width: 300px;
+        .toggle-group {
             display: flex;
             flex-direction: column;
-            gap: 20px;
         }
 
-        .settings-modal .modal-content select,
-        .settings-modal .modal-content input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 16px;
-            border: 1px solid #ddd;
+        .toggle-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 5px;
         }
+
+        .select-box {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s;
+        }
+
+        .select-box:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
         .audio-controls {
             display: flex;
             flex-direction: row;
@@ -248,7 +262,7 @@
             <li>Click <strong>“Submit”</strong> to finalize your answer ✅</li>
             <li>Click <strong>“Restart”</strong> to try again 🔄</li>
             <li>Track your <strong>time and score</strong> on the left panel ⏱️⭐</li>
-            <li>Use <strong>⚙️ Customize</strong> to adjust background, volume, or language</li>
+            <li>Use <strong>⚙️</strong> to adjust background, volume, or language</li>
         </ol>
     </div>
 
@@ -273,7 +287,16 @@
             <!-- Game Info -->
             <div style="margin-bottom: 7px;">
                 <p><strong>⏳ Time:</strong> <span id="timer">0</span> sec</p>
-                <p><strong>⭐ Score:</strong> <span id="score">0</span></p>
+                <p>
+                <strong>⭐ Score:</strong>
+                <span id="score">0</span>
+                <i class="fas fa-info-circle text-info ms-2"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   title="Correct answers give +10 points, while incorrect answers deduct -5 points.">
+                </i>
+            </p>
+
             </div>
 
             <!-- Game Controls -->
@@ -303,32 +326,38 @@
         </div>
     </div>
 
-    <!-- Settings Button -->
-    <button class="settings-btn" onclick="toggleSettings()">⚙️ Customize </button>
+    <!-- Settings Toggle Button -->
+    <button id="settingsToggleBtn" class="toggle-icon-btn">
+        <i class="fas fa-cog"></i>
+    </button>
 
-    <!-- Settings Modal -->
-    <div id="settingsModal" class="settings-modal">
-        <div class="modal-content">
-            <h3>Customize Settings</h3>
-            <label id="volumeLabel" for="volumeControl">🔊 Volume:</label>
+    <!-- Redesigned Settings Panel -->
+    <div class="settings-toggle" id="settingsBox">
+        <div class="toggle-group">
+            <label for="volumeControl">🔊 Volume</label>
             <input type="range" id="volumeControl" min="0" max="1" step="0.01">
+        </div>
 
-            <label for="themeSelector">🎨 Background:</label>
-            <select id="themeSelector">
+        <div class="toggle-group">
+            <label for="themeSelector">🎨 Background</label>
+            <select id="themeSelector" class="select-box">
                 <option value="#D6EAF8">Light Blue</option>
                 <option value="#FDEBD0">Soft Peach</option>
                 <option value="#D5F5E3">Pale Green</option>
                 <option value="#FADBD8">Pastel Pink</option>
                 <option value="#FFFACD">Light Yellow</option>
             </select>
-            <label for="languageSelector">🌎 Language:</label>
-            <select id="languageSelector">
+        </div>
+
+        <div class="toggle-group">
+            <label for="languageSelector">🌎 Language</label>
+            <select id="languageSelector" class="select-box">
                 <option value="en">English</option>
                 <option value="ms">Bahasa Melayu</option>
             </select>
-            <button onclick="closeSettings()" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 8px;">Close</button>
         </div>
     </div>
+
 
 
 
@@ -410,15 +439,24 @@
     </script>
 
 
-    <script>// Toggle settings modal visibility
-        function toggleSettings() {
-            const modal = document.getElementById('settingsModal');
-            modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
-        }
+    <script>
+        const toggleBtn = document.getElementById('settingsToggleBtn');
+        const settingsBox = document.getElementById('settingsBox');
 
-        // Close settings modal
-        function closeSettings() {
-            document.getElementById('settingsModal').style.display = 'none';
-        }</script>
+        toggleBtn.addEventListener('click', () => {
+            settingsBox.style.display = (settingsBox.style.display === 'none' || settingsBox.style.display === '') ? 'flex' : 'none';
+        });
+    </script>
+
+    <!-- Enable Bootstrap Tooltips -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
 
 @endsection

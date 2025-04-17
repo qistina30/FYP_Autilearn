@@ -44,21 +44,20 @@
                                 <input type="password" id="password" name="password" class="form-control">
                             </div>
 
-                            <!-- Guardian Section -->
+                            {{--<!-- Guardian Section -->
                             @if(auth()->user()->role == 'guardian')
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">👨‍👩‍👧 Children Names</label>
-                                    <ul class="list-group">
+                                    <label class="form-label fw-semibold">👨‍👩‍👧 Children Name</label>
+
                                         @foreach(auth()->user()->children as $index => $child)
                                             <li class="list-group-item">
                                                 <input type="text" name="children[{{ $child->id }}]" class="form-control"
                                                        value="{{ old("children.$child->id", $child->full_name) }}">
                                             </li>
                                         @endforeach
-                                    </ul>
-                                </div>
-                            @endif
 
+                                </div>
+                            @endif--}}
                             <div class="d-flex justify-content-end mt-4 gap-2">
                                 <button type="reset" class="btn btn-secondary">
                                     <i class="bi bi-arrow-counterclockwise me-1"></i> Reset

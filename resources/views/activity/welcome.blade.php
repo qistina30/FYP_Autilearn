@@ -6,20 +6,29 @@
             font-family: 'Lexend Deca', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #D6EAF8;
-            transition: background 0.3s ease-in-out;
+            background-image: url('/images/animalback.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 100vh;
+            overflow: hidden; /* ✅ lock scrolling */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
 
-        .dark-theme {
-            background-color: #2c3e50;
-            color: white;
+
+        /* Optional overlay */
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.8); /* Soft white overlay for readability */
+            z-index: 0;
         }
 
-        .light-theme {
-            background-color: #f5f5f5;
-            color: black;
-        }
-
+        /* Content container */
         .welcome-container {
             display: flex;
             flex-direction: column;
@@ -27,33 +36,31 @@
             padding: 40px 20px;
             min-height: 100vh;
             text-align: center;
+            position: relative;
+            z-index: 1;
         }
 
         .title {
             font-size: 36px;
             font-weight: bold;
             margin-bottom: 15px;
+            color: #2c3e50;
         }
 
         .description {
             font-size: 20px;
             max-width: 700px;
             margin-bottom: 30px;
+            color: #34495e;
         }
 
-        .settings-container {
-            margin-bottom: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-        }
-
+        /* Buttons & Inputs */
         .select-box {
             font-size: 18px;
             padding: 8px 15px;
             border-radius: 5px;
             border: 1px solid #ccc;
+            background-color: #f9f9f9;
         }
 
         .btn-container {
@@ -87,6 +94,7 @@
             background: #007bff;
         }
 
+        /* Videos */
         .video-section {
             display: none;
             flex-wrap: wrap;
@@ -108,6 +116,7 @@
             border: none;
         }
 
+        /* Responsive */
         @media (max-width: 768px) {
             .title {
                 font-size: 28px;
@@ -123,6 +132,64 @@
                 aspect-ratio: 16 / 9;
             }
         }
+
+        /* Toggle Button */
+        .toggle-icon-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1100;
+            transition: background-color 0.3s ease;
+        }
+
+        .toggle-icon-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Settings Box */
+        .settings-toggle {
+            position: fixed;
+            bottom: 75px;
+            right: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 15px 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+        }
+
+        .toggle-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .toggle-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .select-box:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+
+
     </style>
 
     <div class="welcome-container">
@@ -131,17 +198,21 @@
             This activity is designed for children with autism to help them recognize animals through interactive pictures and sounds.
         </p>
 
-        <div class="settings-container">
-            <select id="themeSelector" class="select-box">
-                <option value="default">Choose Theme</option>
-                <option value="dark">Dark</option>
-                <option value="light">Light</option>
-            </select>
+        <!-- Toggle Button -->
+        <button id="settingsToggleBtn" class="toggle-icon-btn">
+            <i class="fas fa-cog"></i>
+        </button>
 
-            <select id="languageSelector" class="select-box">
-                <option value="en">English</option>
-                <option value="ms">Bahasa Melayu</option>
-            </select>
+        <!-- Settings Box -->
+        <div class="settings-toggle" id="settingsBox">
+
+            <div class="toggle-group">
+                <label for="languageSelector">🌐 Language</label>
+                <select id="languageSelector" class="select-box">
+                    <option value="en">English</option>
+                    <option value="ms">Bahasa Melayu</option>
+                </select>
+            </div>
         </div>
 
         <div class="btn-container">
@@ -163,6 +234,7 @@
     </div>
 
     <script>
+
         document.addEventListener("DOMContentLoaded", function () {
             const savedTheme = localStorage.getItem('theme') || 'default';
             const savedLanguage = localStorage.getItem('language') || 'en';
@@ -174,20 +246,7 @@
             applyLanguage(savedLanguage);
         });
 
-        document.getElementById('themeSelector').addEventListener('change', function () {
-            const selectedTheme = this.value;
-            localStorage.setItem('theme', selectedTheme);
-            applyTheme(selectedTheme);
-        });
 
-        function applyTheme(theme) {
-            document.body.classList.remove('dark-theme', 'light-theme');
-            if (theme === 'dark') {
-                document.body.classList.add('dark-theme');
-            } else if (theme === 'light') {
-                document.body.classList.add('light-theme');
-            }
-        }
 
         document.getElementById('languageSelector').addEventListener('change', function () {
             const selectedLanguage = this.value;
@@ -213,5 +272,15 @@
             const videoSection = document.getElementById('videoSection');
             videoSection.style.display = (videoSection.style.display === 'flex') ? 'none' : 'flex';
         }
+
+
+            const toggleBtn = document.getElementById('settingsToggleBtn');
+            const settingsBox = document.getElementById('settingsBox');
+
+            toggleBtn.addEventListener('click', () => {
+            settingsBox.style.display = (settingsBox.style.display === 'none' || settingsBox.style.display === '') ? 'flex' : 'none';
+        });
+
+
     </script>
 @endsection

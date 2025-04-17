@@ -58,13 +58,13 @@
                                 </div>
                             </div>
 
-                            <div class="text-center mt-4">
-                                <button type="submit" class="btn btn-success px-5">
-                                    <i class="fas fa-save"></i> Update
+                            <div class="d-flex justify-content-end mt-4 gap-2">
+                                <button type="reset" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
                                 </button>
-                                <a href="{{ route('educator.index') }}" class="btn btn-secondary px-4">
-                                    <i class="fas fa-arrow-left"></i> Back
-                                </a>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-save2-fill me-1"></i> Update
+                                </button>
                             </div>
                         </form>
 

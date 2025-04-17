@@ -15,14 +15,14 @@ height: 300px !important;
 
     <div class="container py-4">
         @if($role === 'admin')
-            <div class="mb-4">
+            <div class="mb-4 text-center">
                 <h2 class="fw-bold text-primary"><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</h2>
                 <p class="text-muted">Welcome back, Admin! Here’s a summary of your platform’s activity.</p>
             </div>
 
             {{-- Summary Cards --}}
             <div class="row g-4 mb-4">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card shadow-sm border-0 h-100">
                         <div class="card-body text-center">
                             <i class="bi bi-person-badge fs-3 text-primary mb-2"></i>
@@ -31,7 +31,7 @@ height: 300px !important;
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card shadow-sm border-0 h-100">
                         <div class="card-body text-center">
                             <i class="bi bi-people fs-3 text-warning mb-2"></i>
@@ -40,22 +40,12 @@ height: 300px !important;
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card shadow-sm border-0 h-100">
                         <div class="card-body text-center">
                             <i class="bi bi-person-lines-fill fs-3 text-success mb-2"></i>
                             <h6 class="text-muted">Most Active Educator</h6>
                             <h5 class="fw-bold text-success">{{ $mostActiveEducatorName }}</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card shadow-sm border-0 h-100">
-                        <div class="card-body text-center">
-                            <i class="bi bi-person-circle fs-3 text-info mb-2"></i>
-                            <h6 class="text-muted">Most Active Student</h6>
-                            <h5 class="fw-bold text-info mb-1">{{ $mostActiveStudentName }}</h5>
-                            <small class="text-muted">Attempts: {{ $mostActiveStudentAttempts }}</small>
                         </div>
                     </div>
                 </div>
@@ -152,8 +142,6 @@ height: 300px !important;
                                 <div class="small text-muted">Last Attempt</div>
                                 <div class="fw-semibold">{{ $child['last_attempt'] }}</div>
                             </div>
-
-
                         </div>
 
                     @if(count($child['recent_scores']) > 0)
