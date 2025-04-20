@@ -76,6 +76,41 @@
             height: auto;
             opacity: 0.7; /* Make it slightly transparent */
         }
+
+        /* Base nav-link style */
+        .navbar-nav .nav-link {
+            position: relative;
+            padding: 10px 15px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        /* Underline animation */
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 4px;
+            width: 100%;
+            height: 2px;
+            background-color: #0d6efd; /* Bootstrap primary */
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease;
+        }
+
+        /* On hover or active */
+        .navbar-nav .nav-link:hover::after,
+        .navbar-nav .nav-link.active::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Change text color on hover */
+        .navbar-nav .nav-link:hover {
+            color: #0d6efd !important;
+        }
+
     </style>
 
 </head>
@@ -103,35 +138,39 @@
                     @auth
                         @if(in_array(auth()->user()->role, ['admin', 'guardian']))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
+                                <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
+                                    Dashboard
+                                </a>
                             </li>
                         @endif
 
                         <!-- Activity (admin, educator only) -->
                         @if(in_array(auth()->user()->role, ['admin', 'educator']))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('activity.welcome') }}">Activity</a>
+                                <a class="nav-link {{ request()->routeIs('activity.welcome') ? 'active' : '' }}" href="{{ route('activity.welcome') }}">
+                                    Activity
+                                </a>
                             </li>
                         @endif
 
                         <!-- View Student (admin, educator only) -->
                         @if(in_array(auth()->user()->role, ['admin', 'educator']))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('student.index') }}">View Student</a>
+                                <a class="nav-link {{ request()->routeIs('student.index') ? 'active' : '' }}" href="{{ route('student.index') }}">View Student</a>
                             </li>
                         @endif
 
                         <!-- View Educator (admin, educator only) -->
                         @if(in_array(auth()->user()->role, ['admin', 'educator']))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('educator.index') }}">View Educator</a>
+                                <a class="nav-link {{ request()->routeIs('educator.index') ? 'active' : '' }}" href="{{ route('educator.index') }}">View Educator</a>
                             </li>
                         @endif
 
                         <!-- View Report (admin, educator, guardian) -->
                         @if(in_array(auth()->user()->role, ['admin', 'educator']))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('report.analytics') }}">View Report</a>
+                                <a class="nav-link {{ request()->routeIs('report.analytics') ? 'active' : '' }}" href="{{ route('report.analytics') }}">View Report</a>
                             </li>
                             @elseif(auth()->user()->role === 'guardian' && auth()->user()->children->isNotEmpty())
                                 @php
@@ -139,7 +178,7 @@
                                 @endphp
                                 @if($firstChild)
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('report.show', ['id' => $firstChild->id]) }}">
+                                        <a class="nav-link {{ request()->routeIs('report.show') ? 'active' : '' }}" href="{{ route('report.show', ['id' => $firstChild->id]) }}">
                                             My Child's Report
                                         </a>
                                     </li>

@@ -85,6 +85,6 @@ class LoginController extends Controller
     public function logout()
     {
         auth()->logout();
-        return redirect('/'); // Redirect to the home page or login page
+        return redirect('login'); // Redirect to the home page or login page
     }
 }

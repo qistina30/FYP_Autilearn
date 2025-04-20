@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+  {{--  <style>
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>--}}
     <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
         <div class="card shadow-lg p-4" style="width: 100%; max-width: 500px; border-radius: 15px;">
 
