@@ -152,7 +152,7 @@ $(document).ready(function () {
                 bird: "Bird",
                 lion: "Lion",
                 cow: "Cow",
-                rabbit: "Rabbit",
+                chicken: "Chicken",
                 horse: "Horse"
             }
         },
@@ -177,7 +177,7 @@ $(document).ready(function () {
                 bird: "Burung",
                 lion: "Singa",
                 cow: "Lembu",
-                rabbit: "Arnab",
+                chicken: "Ayam",
                 horse: "Kuda"
             }
         }
@@ -221,11 +221,12 @@ $(document).ready(function () {
         });
 
         let incorrectAnswers = animalData.filter(a => a.name !== correctAnswer);
-        let randomWrongAnswer = incorrectAnswers.length > 0
-            ? incorrectAnswers[Math.floor(Math.random() * incorrectAnswers.length)].name
-            : "Unknown";
 
-        let allAnswers = [correctAnswer, randomWrongAnswer].sort(() => Math.random() - 0.5);
+// Shuffle incorrect answers and take 1 instead of 3
+        let shuffledWrongAnswers = incorrectAnswers.sort(() => 0.5 - Math.random()).slice(0, 1).map(a => a.name);
+
+// Combine with correct answer and shuffle again
+        let allAnswers = [...shuffledWrongAnswers, correctAnswer].sort(() => 0.5 - Math.random());
 
         $("#answerOptions").html(allAnswers.map(answer =>
             `<button class="answer-btn" data-answer="${answer}">${translations[$("#languageSelector").val()].name[answer] || answer}</button>`

@@ -70,7 +70,7 @@
                             </span>
                             </td>
                             <td><span class="text-warning fw-semibold">{{ $item->time_taken }}</span></td>
-                            <td class="text-muted">{{ $item->created_at->format('d M Y H:i') }}</td>
+                            <td class="text-muted">{{ $item->updated_at->format('d M Y H:i') }}</td>
                             <td class="text-muted">
                                 {{ $item->educator ? $item->educator->name : 'Not Assigned' }}
                             </td>

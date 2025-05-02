@@ -385,25 +385,56 @@
         const animalData = [
             {
                 name: "dog",
-                url: 'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExeTZmNW45YnRuams4eThub2p5dG01dnJ6a3RvdDF6bXIydXZ1amR6NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ekeUFvDhX4kXH7apSy/giphy.gif',
+                url: 'https://media2.giphy.com/media/ekeUFvDhX4kXH7apSy/giphy.gif',
                 sound: "{{ asset('sounds/dog.mp3') }}"
             },
             {
                 name: "cat",
-                url: 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdWIyYnBxaXFpZWE4bmp3cnZhZDNkYm56bnA0cnNzMzQwbmg1MWR5NyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/8Ag4AORS8xPYHdeU6f/giphy.gif',
+                url: 'https://media0.giphy.com/media/8Ag4AORS8xPYHdeU6f/giphy.gif',
                 sound: "{{ asset('sounds/cat.mp3') }}"
             },
             {
                 name: "lion",
-                url: 'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZmV2Nmp5N2dzMWcxZnF4cGh6bjg5bmdmMWp6OTg5Nnd6ZXJ5aWVwNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l46C8pSaCzoiZVXAk/giphy.gif',
+                url: 'https://media1.giphy.com/media/l46C8pSaCzoiZVXAk/giphy.gif',
                 sound: "{{ asset('sounds/lion.wav') }}"
             },
             {
                 name: "elephant",
-                url: 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExeDJjN3M5dWR1cXloNTZ6ODlpcHp2eTBsaGludm1nbjhqZjQ2M2huaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/H3Fv074RPfgK4/giphy.gif',
+                url: 'https://media3.giphy.com/media/H3Fv074RPfgK4/giphy.gif',
                 sound: "{{ asset('sounds/elephant.flac') }}"
+            },
+            {
+                name: "tiger",
+                url: 'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExY253NHF3N2c5OWlnejVzajRrNTdycWZjb2R5eHhmOW8xdms1YWFjeiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/R9z50rPINd5ew/giphy.gif',
+                sound: "{{ asset('sounds/tiger.mp3') }}"
+            },
+            {
+                name: "monkey",
+                url: 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExb29rMWVubG95cWdhejExenp5eXJwdGZtNjV5M2VhbXVob2lmZDExOSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/12uB4fsiMsC8V2/giphy.gif',
+                sound: "{{ asset('sounds/monkey.mp3') }}"
+            },
+            {
+                name: "bird",
+                url: 'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWMyOWhpaGZyYXM1eWs3am9yY2JrcnU5dmFqdW04NmdwOHJ3anlzNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/vDMLHYadpxsOc/giphy.gif',
+                sound: "{{ asset('sounds/bird.mp3') }}"
+            },
+            {
+                name: "cow",
+                url: 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWFuanl3M2R5cGptczA4bHJ4dnZlODB6enMyYnM4aHQzMW1yYjFzeCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xxXXfzVtajAhG/giphy.gif',
+                sound: "{{ asset('sounds/cow.mp3') }}"
+            },
+            {
+                name: "chicken",
+                url: 'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnhkcmIxbmthMTVla3gwbDU4NWl6dzZudm9oY3YycjljZ2o1YTVjbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Q64xRvLOmEmPK/giphy.gif',
+                sound: "{{ asset('sounds/chicken.mp3') }}"
+            },
+            {
+                name: "horse",
+                url: 'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2Vwc28wYWE0cHk4bnBtcTBrc3F0OHh3cnFybGduZGN5dms2M3NrbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/dgzQh3Q3YkQgg/giphy.gif',
+                sound: "{{ asset('sounds/horse.mp3') }}"
             }
         ];
+
         console.log("animalData from Blade:", animalData);
     </script>
             <script>
