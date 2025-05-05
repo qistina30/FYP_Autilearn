@@ -5,6 +5,7 @@
         body {
             font-family: 'Lexend Deca', Arial, sans-serif;
             transition: background-color 0.5s ease-in-out;
+
         }
 
         .game-container {
@@ -242,29 +243,6 @@
         }
 
     </style>
-    <!-- 🎯 How to Play Guide -->
-    <div class="game-guide card p-3 mb-3 shadow-sm" style="background-color: #e8f4ff; border-left: 6px solid #007bff;">
-        <div class="d-flex justify-content-between align-items-center">
-            <h5 class="mb-2 fw-bold text-primary">
-                🎯 How to Play
-            </h5>
-            <button class="btn btn-sm btn-outline-primary" onclick="toggleGuide()">
-                <i class="bi bi-eye-fill me-1"></i> Toggle Guide
-            </button>
-        </div>
-
-        <ol id="guideSteps" class="mt-3" style="padding-left: 20px; display: none; transition: all 0.3s ease;">
-            <li><strong>Select a student</strong> from the dropdown menu 🎓</li>
-            <li>Click <strong>“Start”</strong> to begin the game 🎮</li>
-            <li>Click <strong>“Play Animal Sound”</strong> to hear the sound 🔊</li>
-            <li><strong>Look at the images</strong> and select the correct animal 🐾</li>
-            <li>Or <strong>say the animal name</strong> using <strong>voice command</strong> 🎙️</li>
-            <li>Click <strong>“Submit”</strong> to finalize your answer ✅</li>
-            <li>Click <strong>“Restart”</strong> to try again 🔄</li>
-            <li>Track your <strong>time and score</strong> on the left panel ⏱️⭐</li>
-            <li>Use <strong>⚙️</strong> to adjust background, volume, or language</li>
-        </ol>
-    </div>
 
 
     <div class="game-container">
@@ -325,6 +303,27 @@
             <div id="answerOptions"></div>
         </div>
     </div>
+    <!-- How to Play Toggle Button (beside settings) -->
+    <button id="guideToggleBtn" class="toggle-icon-btn" style="right: 70px;">
+        <i class="fas fa-question-circle"></i>
+    </button>
+
+    <!-- Redesigned How to Play Panel (like settings) -->
+    <!-- Redesigned How to Play Panel -->
+    <div class="settings-toggle" id="guideBox">
+        <div class="toggle-group">
+            <h5 class="fw-bold text-primary mb-2">🎯 How to Play</h5>
+            <ol style="padding-left: 20px; font-size: 14px;">
+                <li>Select a student from the dropdown 🎓</li>
+                <li>Click <strong>Start</strong> to begin 🎮</li>
+                <li>Click <strong>Play Animal Sound</strong> 🔊</li>
+                <li>Choose the matching animal image 🐾</li>
+                <li>Or use <strong>voice command</strong> 🎙️</li>
+                <li>Click <strong>Submit</strong> to confirm ✅</li>
+            </ol>
+        </div>
+    </div>
+
 
     <!-- Settings Toggle Button -->
     <button id="settingsToggleBtn" class="toggle-icon-btn">
@@ -358,15 +357,37 @@
         </div>
     </div>
 
-
-
-
 @endsection
 
 @section('scripts')
 
     {{-- Step 1: Declare animalData --}}
     <script>
+        // Toggle How to Play panel
+        document.getElementById("guideToggleBtn").addEventListener("click", function () {
+            const guideBox = document.getElementById("guideBox");
+            guideBox.classList.toggle("show-toggle");
+        });
+
+        // Optionally hide by default
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("guideBox").classList.remove("show-toggle");
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const guideBtn = document.getElementById("guideToggleBtn");
+            const guideBox = document.getElementById("guideBox");
+
+            guideBtn.addEventListener("click", function () {
+                // Toggle display style
+                if (guideBox.style.display === "none" || guideBox.style.display === "") {
+                    guideBox.style.display = "flex";  // Match CSS 'display: flex'
+                } else {
+                    guideBox.style.display = "none";
+                }
+            });
+        });
+
         function toggleGuide() {
             const guide = document.getElementById('guideSteps');
             if (guide.style.display === "none" || guide.style.display === "") {

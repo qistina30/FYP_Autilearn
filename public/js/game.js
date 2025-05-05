@@ -84,8 +84,15 @@ $(document).ready(function () {
             "dog": ["dog", "dawg", "doggy", "anjin"],
             "cat": ["cat", "kitten", "kitty", "kucing"],
             "lion": ["lion", "lyon", "singa"],
-            "elephant": ["elephant", "elefants", "ellie", "gajah"]
+            "elephant": ["elephant", "elefants", "ellie", "gajah"],
+            "tiger": ["tiger", "tigress", "harimau"],
+            "monkey": ["monkey", "monke", "ape", "monyet"],
+            "bird": ["bird", "birb", "chirp", "burung"],
+            "cow": ["cow", "moo", "cattle", "lembu"],
+            "rabbit": ["rabbit", "bunny", "hare", "arnab"],
+            "horse": ["horse", "pony", "stallion", "kuda"]
         };
+
         return variations[word] || [word];
     }
 
