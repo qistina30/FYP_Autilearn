@@ -1,6 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
+    <style>
+        .dropdown-menu .dropdown-item {
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .dropdown-menu .dropdown-item:hover {
+            background-color: #f0f8ff; /* Light blue highlight */
+            color: #0d6efd; /* Bootstrap primary */
+            font-weight: 500;
+        }
+
+        .dropdown-menu .dropdown-item.text-danger:hover {
+            background-color: #ffe5e5;
+            color: #dc3545;
+        }
+    </style>
     <div class="container py-4">
         <div class="card p-4 shadow-sm rounded-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -43,17 +59,30 @@
 
                             @if(auth()->user()->role === 'admin')
                                 <td class="text-center">
-                                    <a href="{{ route('educator.edit', $educator->id) }}" class="btn btn-warning btn-sm me-1">✏️ Edit</a>
-                                    <form action="{{ route('educator.destroy', $educator->id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm"
-                                                onclick="return confirm('Are you sure you want to delete this educator?');">
-                                            🗑️ Delete
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            ⚙️ Actions
                                         </button>
-                                    </form>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('educator.edit', $educator->id) }}">
+                                                    ✏️ Edit
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <form action="{{ route('educator.destroy', $educator->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this educator?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="dropdown-item text-danger">
+                                                        🗑️ Delete
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </td>
                             @endif
+
                         </tr>
                     @empty
                         <tr>

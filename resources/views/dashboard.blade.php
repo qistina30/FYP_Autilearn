@@ -43,12 +43,13 @@ height: 300px !important;
                 <div class="col-md-4">
                     <div class="card shadow-sm border-0 h-100">
                         <div class="card-body text-center">
-                            <i class="bi bi-person-lines-fill fs-3 text-success mb-2"></i>
-                            <h6 class="text-muted">Most Active Educator</h6>
-                            <h5 class="fw-bold text-success">{{ $mostActiveEducatorName }}</h5>
+                            <i class="bi bi-people-fill fs-3 text-info mb-2"></i>
+                            <h6 class="text-muted">Total Users</h6>
+                            <h3 class="fw-bold text-info">{{ $totalUsers }}</h3>
                         </div>
                     </div>
                 </div>
+
             </div>
 
             {{-- Charts --}}

@@ -153,6 +153,14 @@
                             </li>
                         @endif
 
+                            @if(in_array(auth()->user()->role, ['admin']))
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('admin.index') ? 'active' : '' }}" href="{{ route('admin.index') }}">
+                                        Manage User
+                                    </a>
+                                </li>
+                            @endif
+
                         <!-- View Student (admin, educator only) -->
                         @if(in_array(auth()->user()->role, ['admin', 'educator']))
                             <li class="nav-item">

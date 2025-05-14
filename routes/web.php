@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
@@ -80,3 +81,11 @@ Route::get('/lang/{locale}', function (\Illuminate\Http\Request $request, $local
 Route::get('/report/overall-performance', [ReportController::class, 'overallPerformance'])->name('report.analytics');
 Route::get('/report/{id}', [ReportController::class, 'show'])->name('report.show');
 Route::put('/educator-notes/{id}', [ReportController::class, 'storeNotes'])->name('educator.notes.store');
+
+Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.index');
+// Route for deleting a user
+Route::delete('/admin/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
+
+Route::get('/admin/search', [AdminController::class, 'search'])->name('admin.search');
+Route::get('/admin/{id}/edit', [AdminController::class, 'edit'])->name('admin.edit');
+Route::put('/admin/{id}', [AdminController::class, 'update'])->name('admin.update');

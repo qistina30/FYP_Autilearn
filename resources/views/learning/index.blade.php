@@ -31,7 +31,7 @@
                                 </video>
                             @endif
 
-                          {{--  <!-- Delete Button Form (Only for Admin) -->
+                          {{--  <!-- Delete Button Form (Only for AdminController) -->
                             @if(Auth::user()->role == 'admin')
                                 <form action="{{ route('learning.destroy', $material->id) }}" method="POST" class="mt-2">
                                     @csrf

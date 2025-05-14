@@ -7,7 +7,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card shadow-lg">
-                    <div class="card-header bg-primary text-white text-center">
+                    <div class="card-header bg-primary text-white text-center d-flex justify-content-between align-items-center">
                         <h3 class="mb-0"><i class="fas fa-user-edit"></i> Edit Educator Information</h3>
                     </div>
                     <div class="card-body">
@@ -34,7 +34,7 @@
                                         <i class="fas fa-id-badge"></i> User ID
                                         <i class="fas fa-info-circle text-info ms-1" data-bs-toggle="tooltip"
                                            data-bs-placement="top"
-                                           title="This User ID is fixed and provided by the school."></i>
+                                           title="This User ID is fixed and provided by the school/admin."></i>
 
                                     </label>
                                     <input type="text" class="form-control" id="user_id" name="user_id"

@@ -14,6 +14,7 @@ class DashboardController extends Controller
         $role = $user->role;
 
         if ($role === 'admin') {
+            $totalUsers = User::where('user_id', '!=', 1)->count();
             $totalCompleted = StudentProgress::where('time_taken', '>', 0)->count();
             $totalNotAttempted = StudentProgress::where('time_taken', 0)->count();
 
@@ -89,7 +90,7 @@ class DashboardController extends Controller
                 'mostActiveStudentAttempts',
                 'overallAverageScore',
                 'fastestTime',
-                'mostActiveEducatorName','role','totalCompleted', 'totalNotAttempted','dates','completed'
+                'mostActiveEducatorName','role','totalCompleted', 'totalNotAttempted','dates','completed','totalUsers'
             ));
 
         }}
