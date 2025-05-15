@@ -32,69 +32,6 @@ $(document).ready(function () {
         $("#animalImage").attr("src", selectedAnimal.url).show();
     }
 
-    // Remove the duplicate voice control button creation
-    if (!$("#voiceControlBtn").length) {  // Check if the button already exists
-        $("<button id='voiceControlBtn' class='sound-btn' '>🎙️ Voice Command</button>")
-            .insertAfter("#playSoundBtn")
-            .on("click", function () {
-                startListening();
-            });
-    }
-
-    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'en-US';
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
-    function startListening() {
-        recognition.start();
-    }
-
-    recognition.onresult = function (event) {
-        let speechResult = event.results[0][0].transcript.toLowerCase().trim();
-        let confidence = event.results[0][0].confidence;
-
-        console.log("Recognized:", speechResult, "| Confidence:", confidence);
-        $("#liveTranscript").text(`🗣 ${speechResult}`);
-
-        if (confidence > 0.6) {
-            if (speechResult.includes("start")) $("#startBtn").click();
-            else if (speechResult.includes("restart")) $("#restartBtn").click();
-            else if (speechResult.includes("submit")) $("#submitBtn").click();
-            else {
-                $(".answer-btn").each(function () {
-                    let correctAnswer = $(this).text().toLowerCase();
-                    let variations = getPronunciationVariations(correctAnswer);
-
-                    if (variations.includes(speechResult)) {
-                        $(this).click();
-                    }
-                });
-            }
-        }
-    };
-
-    recognition.onerror = function (event) {
-        console.error("Speech recognition error:", event.error);
-    };
-
-    function getPronunciationVariations(word) {
-        let variations = {
-            "dog": ["dog", "dawg", "doggy", "anjin"],
-            "cat": ["cat", "kitten", "kitty", "kucing"],
-            "lion": ["lion", "lyon", "singa"],
-            "elephant": ["elephant", "elefants", "ellie", "gajah"],
-            "tiger": ["tiger", "tigress", "harimau"],
-            "monkey": ["monkey", "monke", "ape", "monyet"],
-            "bird": ["bird", "birb", "chirp", "burung"],
-            "cow": ["cow", "moo", "cattle", "lembu"],
-            "rabbit": ["rabbit", "bunny", "hare", "arnab"],
-            "horse": ["horse", "pony", "stallion", "kuda"]
-        };
-
-        return variations[word] || [word];
-    }
 
     // Game Start, Stop, and Submit functions
     function startGame() {
@@ -146,7 +83,7 @@ $(document).ready(function () {
             restart: "🔄 Restart",
             submit: "✅ Submit",
             playSound: "🔊 Play Animal Sound",
-            voiceCommand: "🎙️ Voice Command",
+            voiceCommand: "🎙️ Hold to Talk",
             volume: "🔊 Volume:",
             background: "🎨 Background:",
             wellDone: "🎉 Well done! Click Submit to save your progress.",
@@ -171,7 +108,7 @@ $(document).ready(function () {
             restart: "🔄 Mulakan Semula ",
             submit: "✅ Hantar",
             playSound: "🔊 Mainkan Bunyi Haiwan",
-            voiceCommand: "🎙️ Perintah Suara",
+            voiceCommand: "🎙️ Tekan untuk Cakap",
             volume: "🔊 Kelantangan:",
             background: "🎨 Latar Belakang:",
             wellDone: "🎉 Tahniah! Klik Hantar untuk menyimpan kemajuan anda.",

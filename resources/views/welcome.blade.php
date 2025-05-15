@@ -233,7 +233,8 @@
         <div class="feature-icon">🧩</div>
         <div>
             <h3>How it Works</h3>
-            <p>Teachers register students and provide parents with login details. Together, they track progress, support learning, and celebrate milestones!</p>
+            <p>Educators will receive their unique ID and default password directly from their school. With these credentials, they can log in to the system and begin registering students.
+                Teachers and parents can then collaborate to track progress, support learning, and celebrate milestones together!</p>
         </div>
     </div>
 </div>

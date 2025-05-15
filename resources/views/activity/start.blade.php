@@ -103,16 +103,34 @@
             margin-top: 20px;
         }
 
+        #voiceControlBtn.listening {
+            background-color: #dc3545; /* red */
+            color: white;
+            box-shadow: 0 0 10px #dc3545;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 10px #dc3545; }
+            50% { box-shadow: 0 0 20px #dc3545; }
+            100% { box-shadow: 0 0 10px #dc3545; }
+        }
+
         .sound-btn {
-            width: 250px;
-            background: #3498db;
-            border: none;
-            color: black;
-            padding: 10px 16px;
-            font-size: 16px;
-            border-radius: 12px;
+            background-color: #f0f0f0;
+            border: 2px solid #ccc;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.2s ease, transform 0.2s ease;
+            transition: all 0.2s ease;
+        }
+
+        .sound-btn.listening {
+            background-color: #d1e7dd;
+            border-color: #0f5132;
+            color: #0f5132;
+            box-shadow: 0 0 12px #0f5132;
         }
         .answer-btn {
             width: 250px; /* Ensure both have the same width */
@@ -291,7 +309,9 @@
             <div id="audioSection" style="display: none; padding-top: 10px; padding-bottom: 20px;">
                 <div class="audio-controls">
                     <button id="playSoundBtn" class="sound-btn">Play Animal Sound</button>
-                    <!-- voiceControlBtn is inserted dynamically here -->
+                    <button id="voiceControlBtn" class="sound-btn">🎙️ Hold to Talk</button>
+                    <p id="liveTranscript" class="mt-2"></p>
+
                 </div>
             </div>
 
@@ -318,7 +338,7 @@
                 <li>Click <strong>Start</strong> to begin 🎮</li>
                 <li>Click <strong>Play Animal Sound</strong> 🔊</li>
                 <li>Choose the matching animal image 🐾</li>
-                <li>Or use <strong>voice command</strong> 🎙️</li>
+                <li>Or use <strong>Hold to Talk</strong> 🎙️</li>
                 <li>Click <strong>Submit</strong> to confirm ✅</li>
             </ol>
         </div>
@@ -509,6 +529,104 @@
                 return new bootstrap.Tooltip(tooltipTriggerEl);
             });
         });
+    </script>
+
+        <script>
+            $("#voiceControlBtn")
+                .on("mousedown", () => {
+                    beepSound.play();
+                    recognition.start();
+                    $("#voiceControlBtn").addClass("listening"); // add visual feedback
+                })
+                .on("mouseup mouseleave", () => {
+                    recognition.stop();
+                    $("#voiceControlBtn").removeClass("listening");
+                });
+
+            // Only create the button if not already present
+            if (!$("#voiceControlBtn").length) {
+            $("<button id='voiceControlBtn' class='sound-btn'>🎙️ Hold to Talk</button>")
+                .insertAfter("#playSoundBtn");
+        }
+
+            // Load beep sound
+            const beepSound = new Audio('/sounds/beep.mp3');
+            beepSound.load(); // Ensure it's ready to play
+
+            // Speech Recognition Setup
+            window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            function startListening() {
+            beepSound.currentTime = 0;
+            beepSound.play();
+            recognition.start();
+        }
+
+            function stopListening() {
+            recognition.stop();
+            beepSound.currentTime = 0;
+            beepSound.play();
+        }
+
+            // Start on hold (mousedown), Stop on release (mouseup or mouseleave)
+            const voiceBtn = $("#voiceControlBtn");
+            voiceBtn.on("mousedown touchstart", function () {
+            startListening();
+        });
+
+            voiceBtn.on("mouseup mouseleave touchend", function () {
+            stopListening();
+        });
+
+            // Speech result handler
+            recognition.onresult = function (event) {
+            let speechResult = event.results[0][0].transcript.toLowerCase().trim();
+            let confidence = event.results[0][0].confidence;
+
+            console.log("Recognized:", speechResult, "| Confidence:", confidence);
+            $("#liveTranscript").text(`🗣 ${speechResult}`);
+
+            if (confidence > 0.6) {
+            if (speechResult.includes("start")) $("#startBtn").click();
+            else if (speechResult.includes("restart")) $("#restartBtn").click();
+            else if (speechResult.includes("submit")) $("#submitBtn").click();
+            else {
+            $(".answer-btn").each(function () {
+            let correctAnswer = $(this).text().toLowerCase();
+            let variations = getPronunciationVariations(correctAnswer);
+            if (variations.includes(speechResult)) {
+            $(this).click();
+        }
+        });
+        }
+        }
+        };
+
+            recognition.onerror = function (event) {
+            console.error("Speech recognition error:", event.error);
+        };
+
+            // Pronunciation variations
+            function getPronunciationVariations(word) {
+            let variations = {
+            "dog": ["dog", "dawg", "doggy", "anjin"],
+            "cat": ["cat", "kitten", "kitty", "kucing"],
+            "lion": ["lion", "lyon", "singa"],
+            "elephant": ["elephant", "elefants", "ellie", "gajah"],
+            "tiger": ["tiger", "tigress", "harimau"],
+            "monkey": ["monkey", "monke", "ape", "monyet"],
+            "bird": ["bird", "birb", "chirp", "burung"],
+            "cow": ["cow", "moo", "cattle", "lembu"],
+            "rabbit": ["rabbit", "bunny", "hare", "arnab"],
+            "horse": ["horse", "pony", "stallion", "kuda"]
+        };
+
+            return variations[word] || [word];
+        }
     </script>
 
 @endsection
