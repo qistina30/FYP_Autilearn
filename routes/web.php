@@ -80,6 +80,9 @@ Route::get('/lang/{locale}', function (\Illuminate\Http\Request $request, $local
 
 Route::get('/report/overall-performance', [ReportController::class, 'overallPerformance'])->name('report.analytics');
 Route::get('/report/{id}', [ReportController::class, 'show'])->name('report.show');
+Route::get('/report/pdf/{student}', [ReportController::class, 'downloadPdf'])->name('report.download.pdf');
+
+
 Route::put('/educator-notes/{id}', [ReportController::class, 'storeNotes'])->name('educator.notes.store');
 
 Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.index');

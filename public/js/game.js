@@ -236,8 +236,29 @@ $(document).ready(function () {
                 time_taken: timeTaken,
             },
             success: function(response) {
-                alert("Game progress saved! Final Score: " + score);
+                Swal.fire({
+                    title: '🎉 Well Done!',
+                    text: `You scored ${score} points!`,
+                    icon: 'success',
+                    background: '#fff9e6',
+                    color: '#333',
+                    customClass: {
+                        popup: 'kid-popup',
+                        confirmButton: 'kid-button'
+                    },
+                    timer: 5000,                // Auto-close after 5 seconds
+                    timerProgressBar: true,     // Show progress bar
+                    showConfirmButton: true,    // Still show "Yay!" button
+                    confirmButtonText: 'Yay!',
+                    allowOutsideClick: false,
+                    allowEscapeKey: true,
+                    allowEnterKey: true
+                })
+                    .then((result) => {
+                        console.log('Popup closed automatically or by clicking Yay');
+                    });
             },
+
             error: function(xhr) {
                 console.log(xhr.responseText);
                 alert("Error updating progress.");

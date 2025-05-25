@@ -2,9 +2,15 @@
 
 @section('content')
     <div class="container py-4">
-        <h3 class="mb-4 text-primary fw-bold">
-            📄 Report for {{ $student->full_name }}
-        </h3>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="text-primary fw-bold mb-0">
+                📄 Report for {{ $student->full_name }}
+            </h3>
+            <a href="{{ route('report.download.pdf', $student->id) }}"
+               class="btn btn-success text-white shadow-sm d-flex align-items-center gap-2 rounded-3">
+                <i class="bi bi-download"></i> Download PDF
+            </a>
+        </div>
 
         <!-- Metric Cards -->
         <div class="row mb-5">

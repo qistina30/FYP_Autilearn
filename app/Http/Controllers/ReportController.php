@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use App\Models\StudentProgress;
 
@@ -119,4 +121,17 @@ class ReportController extends Controller
     }
 
 
+
+    public function downloadPdf($studentId)
+    {
+        $student = Student::findOrFail($studentId);
+
+        $progress = StudentProgress::where('student_id', $student->id)->with('educator')->get();
+        $averageScore = $progress->avg('score');
+        $averageTime = $progress->avg('time_taken');
+        $attempts = $progress->count();
+
+        $pdf = Pdf::loadView('report.pdf', compact('student', 'progress', 'averageScore', 'averageTime', 'attempts'));
+        return $pdf->download('report_' . $student->full_name . '.pdf');
+    }
 }

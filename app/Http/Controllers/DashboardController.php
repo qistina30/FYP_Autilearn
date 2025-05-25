@@ -114,7 +114,7 @@ class DashboardController extends Controller
                 $time = $latestProgress?->time_taken ?? null;
                 $attempt = $latestProgress?->attempt_number ?? null;
                 $lastAttempt = $latestProgress?->created_at?->format('d M Y, h:i A') ?? '-';
-                $percentage = $score ? number_format(($score / 40) * 100, 1) : null;
+                $percentage = $score ? number_format(($score / 50) * 100, 1) : null;
                 $educatorName = $latestProgress?->educator?->name ?? 'Not Specified';
 
                 // Calculate performance trend

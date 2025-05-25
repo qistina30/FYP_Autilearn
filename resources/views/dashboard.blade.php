@@ -126,7 +126,7 @@ height: 300px !important;
                             <div class="col-md-3 col-6 mb-3">
                                 <div class="small text-muted">Latest Score</div>
                                 <div class="fw-semibold">
-                                    {{ $child['score'] !== null ? $child['score'] . ' / 40 (' . $child['percentage'] . '%)' : 'Not Attempted Yet' }}
+                                    {{ $child['score'] !== null ? $child['score'] . ' / 50 (' . $child['percentage'] . '%)' : 'Not Attempted Yet' }}
                                 </div>
                             </div>
                             <div class="col-md-3 col-6 mb-3">
@@ -175,7 +175,7 @@ height: 300px !important;
             data: {
                 labels: [...Array({{ count($child['recent_scores']) }}).keys()].map(i => 'Attempt ' + (i + 1)),
                 datasets: [{
-                    label: 'Score (out of 40)',
+                    label: 'Score (out of 50)',
                     data: {!! json_encode($child['recent_scores']) !!},
                     fill: true,
                     backgroundColor: gradient{{ $index }},
