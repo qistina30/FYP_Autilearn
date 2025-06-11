@@ -43,7 +43,7 @@
                     <tr>
                         <th class="text-center">No</th>
                         <th>Full Name</th>
-                        <th>IC Number</th>
+                        <th>MyKID/IC Number</th>
                         <th>Guardian Name</th>
                         <th>Contact Number</th>
                         <th>Email</th>

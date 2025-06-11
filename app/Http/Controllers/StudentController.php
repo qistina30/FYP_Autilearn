@@ -55,7 +55,7 @@ class StudentController extends Controller
                 'full_name' => 'required|string|max:255',
                 'ic_number' => 'required|string|unique:students,ic_number',
                 'guardian_name' => 'required|string|max:255',
-                'contact_number' => 'required|string|max:255',
+                'contact_number' => 'required|numeric|digits_between:10,13',
                 'email' => 'nullable|email',
             ]);
 

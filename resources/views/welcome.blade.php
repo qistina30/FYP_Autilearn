@@ -6,6 +6,7 @@
     <title>Autilearn</title>
     <meta name="description" content="A supportive learning platform for autistic children, parents, and educators.">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
     <style>
         body {
@@ -58,19 +59,28 @@
 
         .cta-buttons a {
             margin-top: 30px;
-            display: inline-block;
-            background-color: #0077cc;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: deeppink;
             color: #fff;
-            padding: 14px 28px;
+            padding: 14px 32px;
             font-size: 18px;
-            border-radius: 30px;
+            font-weight: 600;
+            border-radius: 40px;
             text-decoration: none;
-            transition: background 0.3s ease;
+            border: none;
+            box-shadow: 0 6px 18px rgba(0, 123, 255, 0.3);
+            transition: all 0.3s ease-in-out;
         }
 
         .cta-buttons a:hover {
-            background-color: #005fa3;
+            background: linear-gradient(135deg, green, deeppink);
+            box-shadow: 0 8px 24px rgba(0, 123, 255, 0.5);
+            transform: translateY(-2px) scale(1.05);
         }
+
 
         /* Animations */
         @keyframes fadeInUp {
@@ -203,8 +213,8 @@
     </div>
     <h1>Inspiring Learning through Love and Support</h1>
     <p>Autilearn is a fun, safe, and helpful space for children with autism, their parents, and educators. Let’s learn and grow together!</p>
-    <div class="cta-buttons">
-        <a href="{{ route('login') }}">Login</a>
+    <div class="cta-buttons btn btn-primary">
+        <a href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right me-2"></i>Login</a>
     </div>
 </div>
 

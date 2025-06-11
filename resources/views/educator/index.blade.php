@@ -38,7 +38,9 @@
                     <thead class="table-primary text-white">
                     <tr>
                         <th class="text-center">No</th>
-                        <th>User ID</th>
+                        @if(auth()->user()->role === 'admin')
+                            <th>User ID</th>
+                        @endif
                         <th>Name</th>
                         <th>Email</th>
 
@@ -53,7 +55,9 @@
                             <td class="text-center fw-bold">
                                 {{ ($educators->currentPage() - 1) * $educators->perPage() + $loop->iteration }}
                             </td>
-                            <td>{{ $educator->user_id }}</td>
+                            @if(auth()->user()->role === 'admin')
+                                <td>{{ $educator->user_id }}</td>
+                            @endif
                             <td>{{ $educator->name }}</td>
                             <td>{{ $educator->email }}</td>
 

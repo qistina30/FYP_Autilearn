@@ -53,9 +53,21 @@
 
                                 <!-- Guardian Contact -->
                                 <div class="col-md-6 mb-3">
-                                    <label for="contact_number" class="form-label"><i class="fas fa-phone" style="color: #fd7e14;"></i> Guardian Contact Number</label>
-                                    <input type="text" class="form-control" id="contact_number" name="contact_number" required placeholder="Enter contact number">
+                                    <label for="contact_number" class="form-label">
+                                        <i class="fas fa-phone" style="color: #fd7e14;"></i> Guardian Contact Number
+                                    </label>
+                                    <input type="tel"
+                                           class="form-control"
+                                           id="contact_number"
+                                           name="contact_number"
+                                           required
+                                           placeholder="Enter contact number"
+                                           pattern="[0-9]{10,13}"
+                                           maxlength="13"
+                                           oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                           title="Please enter a valid phone number (digits only, 10–13 characters)">
                                 </div>
+
                             </div>
 
                             <div class="row">
